@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>内容列表</title>
+
+ <link rel="stylesheet" href="/static/js/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" href="/static/js/zTree/css/demo.css" type="text/css">
+ 
+  <script type="text/javascript" src="/static/dtcms2/scripts/jquery/jquery-1.10.2.min.js"></script>
+  <link href="/static/dtcms2/admin/skin/default/style.css" rel="stylesheet" type="text/css" />
+  <link  href="/static/dtcms2/css/pagination.css" rel="stylesheet" type="text/css" />
+   <script type="text/javascript" src="/static/js/zTree/js/jquery.ztree.core-3.5.js"></script>
+  <script type="text/javascript" src="/static/js/toolTip/jquery.toolTip.js"></script>
+   <script type="text/javascript" src="/static/js/lhgdialog/lhgdialog.js?skin=idialog"></script>
+</head>
+
+<body>
+  <!--该JS与tooltipjs不兼容
+<script type="text/javascript" src="/static/js/lhgdialog/lhgdialog.js?skin=idialog"></script>
+-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back fr"> <i></i>
+    <span>返回上一页</span>
+  </a>
+  <a href="../center.aspx" class="home"> <i></i>
+    <span>首页</span>
+  </a>
+  <i class="arrow"></i>
+  <span>资讯列表</span>
+</div>
+<!--/导航栏-->
+<div class="mainbody">
+  <form name="form1" method="post" action="" id="form1">
+
+    <!--工具栏-->
+    <div class="toolbar-wrap">
+      <div id="floatHead" class="toolbar">
+        <div class="l-list">
+          <ul class="icon-list">
+            <li style="list-style-type: none">
+              <a class="all"  href="javascript:;">
+                <i></i>
+                <span id="quanxuan">全选</span>
+              </a>
+            </li>
+            <li style="list-style-type: none">
+              <a class="add" href='/admin/article/add?catid={{.Catid}}'>
+                <i></i>
+                <span>新增</span>
+              </a>
+            </li>
+            <li style="list-style-type: none">
+              <a class="btn btn-success" id="delMulti">
+                <i></i>
+                <span>删除</span>
+              </a>
+            </li>
+            <li style="list-style-type: none">
+              &nbsp;&nbsp;<input type="hidden" id="CategoryId" name="Catid" value="{{.Catid}}" />
+              <input style="width:180px;font-size:12px;" type="text" value="{{.CatName}}" readonly onclick="showMenu(); return false;"  class="input"  id="ParentTitle"  datatype="*1-100" sucmsg=" "  />
+            </li>
+          </ul>
+        </div>
+        <div class="r-list">
+          <input name="txtKeywords" type="text" id="txtKeywords" class="keyword" style="width:200px" />
+          <a id="lbtnSearch" class="btn-search" href="javascript:__doPostBack('lbtnSearch','')">查询</a>
+        </div>
+      </div>
+    </div>
+    <!--/工具栏-->
+
+    <!--文字列表-->
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
+      <tr>
+        <th width="6%">选择</th>
+        <th align="left">标题</th>
+        <th align="left" width="10%">所属类别</th>
+        <th align="left" width="15%">发布时间</th>   
+        <th align="left" width="10%">点击量</th>
+        <th align="left" width="10%">状态</th>
+        <th width="10%">操作</th>
+      </tr>
+      {{range .Articles}}
+      <tr>
+        <td align="center">
+          <span class="checkall" style="vertical-align:middle;">
+            <input class="checkbox itemId" type="checkbox"  value="{{.Id}}"  />
+          </span>
+        </td>
+      <td>
+      {{if ne .Thumb ""}}<img class="showThumb" link="{{.Thumb}}" style="cursor:pointer" src="/static/img/img.gif">{{end}}
+      <a href="#">{{.Title}}</a>  
+      </td>
+      <td>{{GetBaseTitle .Catid}}</td>
+      <td>{{date .AddTime "Y-m-d H:i:s"}}</td>
+      <td>
+        <div class="btn-tools">{{.Hits}}次</div>
+      </td>
+      <td>
+        {{if eq .Status 3}}
+          <span style="color:green">已通过</span>
+        {{else if eq .Status 2}}
+          <span style="color:red">待审核</span>
+        {{end}}
+      </td>
+      <td align="center">
+        <a href="/admin/article/update?id={{.Id}}">修改</a>
+      </td>
+    </tr>
+    {{end}}
+  </table>
+  <div class="line20"></div>
+  <div class="pagelist">
+    <div class="l-btns">
+      <span>显示</span>
+      <input  type="text" value="{{.PageSize}}"  class="pagenum"  />
+      <span>条/页</span>
+    </div>
+    <div  class="default">
+      <span>共{{.totalItem}}记录</span>
+      <div style="float:left;">{{.pagerhtml}}</div>
+    </div>
+
+  </div>
+  <!--/内容底部-->
+</form>
+</div>
+
+<script language="javascript" type="text/javascript">  
+ /**
+  * [description]
+  * 全选，以及取消全选
+  */
+ $().ready(function(){
+    $("#quanxuan").click(function() {
+        var txt=$("#quanxuan").text();
+        if (txt=="全选") {
+                $(".checkbox").each(function() {
+                 this.checked = true;
+                });
+                $("#quanxuan").text("反选")
+
+        }else if (txt=="反选"){
+                $(".checkbox").each(function() {
+                  this.checked = false;
+                });
+                $("#quanxuan").text("全选")
+        }
+     });
+  });
+
+ // 批量删除
+  multi_ids = "";
+
+  $("#delMulti").click(function(){
+    $(".itemId").each(function(){
+
+      if ($(this).prop("checked")) {
+        multi_ids += $(this).val() + ",";
+      }else {
+         
+      }
+      
+    })
+
+    str_len = multi_ids.length;
+    multiIds = multi_ids.substring(0,str_len-1)
+    
+    if (multiIds != "") {
+
+      $.dialog({
+              id: 'testID2',
+              icon: 'error.gif',
+              titleIcon: 'lhgcore.gif',
+              title: '提示',
+              max: false,
+              min: false,
+              content: '删除后将无法恢复！',
+              ok: function(){
+                  $.post("/admin/article/delete", {"ids":multiIds}, function(data){
+                  if (data == "y") {
+                    $.dialog.tips('删除成功！',3,'succ.png',function(){this.reload();});
+                  }else {
+                    $.dialog.tips('对不起，读取数据失败',5,'fail.png');
+                  }
+                })
+              },
+              cancel: true 
+
+       });
+
+      
+    }else {
+       $.dialog({
+              id: 'testID2',
+               icon: 'error.gif',
+              titleIcon: 'lhgcore.gif',
+
+              time: 3,
+              title: '提示',
+              max: false,
+              min: false,
+              content: '对不起，请选择删除项！'
+       });
+    }
+
+
+  })
+
+  // 显示标题图
+  $(".showThumb").click(function(){
+    pic_url = "<img src=\"" + $(this).attr("link") + "\" />";
+    $.dialog({
+      id: 'testID2',
+      time: 3,
+      title: '图片预览',
+      max: false,
+      min: false,
+      content: pic_url 
+    });
+  })
+
+  $(function(){
+    $("#selectedCat").change(function(){
+       location.href = "/admin/article/list?catid=" + $(this).val();
+    })
+  })
+</script>
+
+
+<div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+    <ul id="treeDemo" class="ztree" style="margin-top:0; width:200px;"></ul>
+  </div>
+  <script type="text/javascript">
+    var setting = {
+      view: {
+        dblClickExpand: false,
+        showIcon: false
+      },
+      data: {
+        simpleData: {
+          enable: true
+        }
+      },
+      callback: {
+        beforeClick: beforeClick,
+        onClick: onClick
+      }
+    };
+    var zNodes =  eval('(' + {{.List}} + ')');
+    function beforeClick(treeId, treeNode) {
+    }
+    function onClick(e, treeId, treeNode) {
+      var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+      nodes = zTree.getSelectedNodes(),
+      v = "";
+      nodes.sort(function compare(a,b){return a.id-b.id;});
+      for (var i=0, l=nodes.length; i<l; i++) {
+        v += nodes[i].name + ",";
+      }
+      if (v.length > 0 ) v = v.substring(0, v.length-1);
+      var cityObj = $("#ParentTitle");
+      cityObj.attr("value", v);
+      $("#CategoryId").val(treeNode.id);
+
+      <!--分类显示-->
+          location.href = "/admin/article/list?catid="+treeNode.id;
+      <!--分类显示-->
+      
+    }
+    function showMenu() {
+      var cityObj = $("#ParentTitle");
+      var cityOffset = $("#ParentTitle").offset();
+      $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+      $("body").bind("mousedown", onBodyDown);
+    }
+    function hideMenu() {
+      $("#menuContent").fadeOut("fast");
+      $("body").unbind("mousedown", onBodyDown);
+    }
+    function onBodyDown(event) {
+      if (!(event.target.id == "ParentTitle" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+        hideMenu();
+      }
+    }
+    $(document).ready(function(){
+      $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+
+  </script>
+</body>
+</html>

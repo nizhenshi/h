@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>内容列表</title>
+<script type="text/javascript" src="../../scripts/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../../scripts/jquery/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="../../scripts/lhgdialog/lhgdialog.js?skin=idialog"></script>
+<script type="text/javascript" src="../js/layout.js"></script>
+<link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
+<link  href="../../css/pagination.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    $(function () {
+        imgLayout();
+        $(window).resize(function () {
+            imgLayout();
+        });
+        //图片延迟加载
+        $(".pic img").lazyload({ load: AutoResizeImage, effect: "fadeIn" });
+        //点击图片链接
+        $(".pic img").click(function () {
+            //$.dialog({ lock: true, title: "查看大图", content: "<img src=\"" + $(this).attr("src") + "\" />", padding: 0 });
+            var linkUrl = $(this).parent().parent().find(".foot a").attr("href");
+            if (linkUrl != "") {
+                location.href = linkUrl; //跳转到修改页面
+            }
+        });
+    });
+    //排列图文列表
+    function imgLayout() {
+        var imgWidth = $(".imglist").width();
+        var lineCount = Math.floor(imgWidth / 222);
+        var lineNum = imgWidth % 222 / (lineCount - 1);
+        $(".imglist ul").width(imgWidth + Math.ceil(lineNum));
+        $(".imglist ul li").css("margin-right", parseFloat(lineNum));
+    }
+    //等比例缩放图片大小
+    function AutoResizeImage(e, s) {
+        var img = new Image();
+        img.src = $(this).attr("src")
+        var w = img.width;
+        var h = img.height;
+        var wRatio = w / h;
+        if ((220 / wRatio) >= 165) {
+            $(this).width(220); $(this).height(220 / wRatio);
+        } else {
+            $(this).width(165 * wRatio); $(this).height(165);
+        }
+    }
+</script>
+</head>
+
+<body>
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back fr"><i></i><span>返回上一页</span></a>
+  <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
+  <i class="arrow"></i>
+  <span>内容列表</span>
+</div>
+<!--/导航栏-->
+<div class="mainbody">
+<form name="form1" method="post" action="article_list.aspx?channel_id=1" id="form1">
+
+
+<!--工具栏-->
+<div class="toolbar-wrap">
+  <div id="floatHead" class="toolbar">
+    <div class="l-list">
+      <ul class="icon-list">
+        <li><a class="add" href="article_edit.aspx?action=Add&channel_id=1"><i></i><span>新增</span></a></li>
+        <li><a id="btnSave" class="save" href="javascript:__doPostBack('btnSave','')"><i></i><span>保存</span></a></li>
+        <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
+        <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
+      </ul>
+      <div class="menu-list">
+        <div class="rule-single-select">
+          <select name="ddlCategoryId" onchange="javascript:setTimeout('__doPostBack(\'ddlCategoryId\',\'\')', 0)" id="ddlCategoryId">
+	<option selected="selected"  value="">所有类别</option>
+	<option value="1">IT资讯</option>
+	<option value="3">　├ IT业界</option>
+	<option value="4">　├ 软媒动态</option>
+	<option value="5">　├ 科技要闻</option>
+	<option value="6">数码产品</option>
+	<option value="7">　├ 笔记本电脑</option>
+	<option value="8">　├ 平板电脑</option>
+	<option value="9">　├ 智能手机</option>
+	<option value="10">　├ 超极本</option>
+
+</select>
+        </div>
+        <div class="rule-single-select">
+          <select name="ddlProperty" onchange="javascript:setTimeout('__doPostBack(\'ddlProperty\',\'\')', 0)" id="ddlProperty">
+	<option selected="selected" value="">所有属性</option>
+	<option value="isMsg">允许评论</option>
+	<option value="isTop">置顶</option>
+	<option value="isRed">推荐</option>
+	<option value="isHot">热门</option>
+	<option value="isSlide">幻灯片</option>
+
+</select>
+        </div>
+      </div>
+    </div>
+    <div class="r-list">
+      <input name="txtKeywords" type="text" id="txtKeywords" class="keyword" style="width:200px" />
+      <a id="lbtnSearch" class="btn-search" href="javascript:__doPostBack('lbtnSearch','')">查询</a>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--文字列表-->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
+  <tr>
+    <th width="6%">选择</th>
+    <th align="left">标题</th>
+    <th align="left" width="12%">所属类别</th>
+    <th align="left" width="16%">发布时间</th>
+    <th align="left" width="65">排序</th>
+    <th align="left" width="110">属性</th>
+    <th width="8%">操作</th>
+  </tr>
+
+  <tr>
+    <td align="center"><span class="checkall" style="vertical-align:middle;"><input id="rptList1_ctl01_chkId" type="checkbox" name="rptList1$ctl01$chkId" /></span><input type="hidden" name="rptList1$ctl01$hidId" id="rptList1_ctl01_hidId" value="62" /></td>
+    <td><a href="article_edit.aspx?action=Edit&channel_id=1&id=62">需求疲软 4GB DDR3内存纷纷跌破百元大关</a></td>
+    <td>IT业界</td>
+    <td>2012-10-20 12:54</td>
+    <td><input name="rptList1$ctl01$txtSortId" type="text" value="0" id="rptList1_ctl01_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td>
+      <div class="btn-tools">
+        <a id="rptList1_ctl01_lbtnIsMsg" title="设置评论" class="msg" href="javascript:__doPostBack('rptList1$ctl01$lbtnIsMsg','')"></a>
+        <a id="rptList1_ctl01_lbtnIsTop" title="设置置顶" class="top" href="javascript:__doPostBack('rptList1$ctl01$lbtnIsTop','')"></a>
+        <a id="rptList1_ctl01_lbtnIsRed" title="设置推荐" class="red" href="javascript:__doPostBack('rptList1$ctl01$lbtnIsRed','')"></a>
+        <a id="rptList1_ctl01_lbtnIsHot" title="设置热门" class="hot" href="javascript:__doPostBack('rptList1$ctl01$lbtnIsHot','')"></a>
+        <a id="rptList1_ctl01_lbtnIsSlide" title="设置幻灯片" class="pic" href="javascript:__doPostBack('rptList1$ctl01$lbtnIsSlide','')"></a>
+      </div>
+    </td>
+    <td align="center"><a href="article_edit.aspx?action=Edit&channel_id=1&id=62">修改</a></td>
+  </tr>
+
+  <tr>
+    <td align="center"><span class="checkall" style="vertical-align:middle;"><input id="rptList1_ctl02_chkId" type="checkbox" name="rptList1$ctl02$chkId" /></span><input type="hidden" name="rptList1$ctl02$hidId" id="rptList1_ctl02_hidId" value="77" /></td>
+    <td><a href="article_edit.aspx?action=Edit&channel_id=1&id=77">历史性时刻：ARM首次成功模拟运行x86</a></td>
+    <td>科技要闻</td>
+    <td>2012-10-20 13:49</td>
+    <td><input name="rptList1$ctl02$txtSortId" type="text" value="99" id="rptList1_ctl02_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td>
+      <div class="btn-tools">
+        <a id="rptList1_ctl02_lbtnIsMsg" title="取消评论" class="msg selected" href="javascript:__doPostBack('rptList1$ctl02$lbtnIsMsg','')"></a>
+        <a id="rptList1_ctl02_lbtnIsTop" title="设置置顶" class="top" href="javascript:__doPostBack('rptList1$ctl02$lbtnIsTop','')"></a>
+        <a id="rptList1_ctl02_lbtnIsRed" title="设置推荐" class="red" href="javascript:__doPostBack('rptList1$ctl02$lbtnIsRed','')"></a>
+        <a id="rptList1_ctl02_lbtnIsHot" title="设置热门" class="hot" href="javascript:__doPostBack('rptList1$ctl02$lbtnIsHot','')"></a>
+        <a id="rptList1_ctl02_lbtnIsSlide" title="设置幻灯片" class="pic" href="javascript:__doPostBack('rptList1$ctl02$lbtnIsSlide','')"></a>
+      </div>
+    </td>
+    <td align="center"><a href="article_edit.aspx?action=Edit&channel_id=1&id=77">修改</a></td>
+  </tr>
+
+  <tr>
+    <td align="center"><span class="checkall" style="vertical-align:middle;"><input id="rptList1_ctl03_chkId" type="checkbox" name="rptList1$ctl03$chkId" /></span><input type="hidden" name="rptList1$ctl03$hidId" id="rptList1_ctl03_hidId" value="76" /></td>
+    <td><a href="article_edit.aspx?action=Edit&channel_id=1&id=76">超级黑客Comex离开苹果</a></td>
+    <td>IT业界</td>
+    <td>2012-10-20 13:47</td>
+    <td><input name="rptList1$ctl03$txtSortId" type="text" value="99" id="rptList1_ctl03_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td>
+      <div class="btn-tools">
+        <a id="rptList1_ctl03_lbtnIsMsg" title="取消评论" class="msg selected" href="javascript:__doPostBack('rptList1$ctl03$lbtnIsMsg','')"></a>
+        <a id="rptList1_ctl03_lbtnIsTop" title="设置置顶" class="top" href="javascript:__doPostBack('rptList1$ctl03$lbtnIsTop','')"></a>
+        <a id="rptList1_ctl03_lbtnIsRed" title="设置推荐" class="red" href="javascript:__doPostBack('rptList1$ctl03$lbtnIsRed','')"></a>
+        <a id="rptList1_ctl03_lbtnIsHot" title="设置热门" class="hot" href="javascript:__doPostBack('rptList1$ctl03$lbtnIsHot','')"></a>
+        <a id="rptList1_ctl03_lbtnIsSlide" title="取消幻灯片" class="pic selected" href="javascript:__doPostBack('rptList1$ctl03$lbtnIsSlide','')"></a>
+      </div>
+    </td>
+    <td align="center"><a href="article_edit.aspx?action=Edit&channel_id=1&id=76">修改</a></td>
+  </tr>
+
+  <tr>
+    <td align="center"><span class="checkall" style="vertical-align:middle;"><input id="rptList1_ctl04_chkId" type="checkbox" name="rptList1$ctl04$chkId" /></span><input type="hidden" name="rptList1$ctl04$hidId" id="rptList1_ctl04_hidId" value="75" /></td>
+    <td><a href="article_edit.aspx?action=Edit&channel_id=1&id=75">小蛮腰随心扭，联想Win8变形本Twist宣传视频</a></td>
+    <td>笔记本电脑</td>
+    <td>2012-10-20 13:45</td>
+    <td><input name="rptList1$ctl04$txtSortId" type="text" value="99" id="rptList1_ctl04_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td>
+      <div class="btn-tools">
+        <a id="rptList1_ctl04_lbtnIsMsg" title="取消评论" class="msg selected" href="javascript:__doPostBack('rptList1$ctl04$lbtnIsMsg','')"></a>
+        <a id="rptList1_ctl04_lbtnIsTop" title="设置置顶" class="top" href="javascript:__doPostBack('rptList1$ctl04$lbtnIsTop','')"></a>
+        <a id="rptList1_ctl04_lbtnIsRed" title="设置推荐" class="red" href="javascript:__doPostBack('rptList1$ctl04$lbtnIsRed','')"></a>
+        <a id="rptList1_ctl04_lbtnIsHot" title="设置热门" class="hot" href="javascript:__doPostBack('rptList1$ctl04$lbtnIsHot','')"></a>
+        <a id="rptList1_ctl04_lbtnIsSlide" title="设置幻灯片" class="pic" href="javascript:__doPostBack('rptList1$ctl04$lbtnIsSlide','')"></a>
+      </div>
+    </td>
+    <td align="center"><a href="article_edit.aspx?action=Edit&channel_id=1&id=75">修改</a></td>
+  </tr>
+
+  <tr>
+    <td align="center"><span class="checkall" style="vertical-align:middle;"><input id="rptList1_ctl05_chkId" type="checkbox" name="rptList1$ctl05$chkId" /></span><input type="hidden" name="rptList1$ctl05$hidId" id="rptList1_ctl05_hidId" value="74" /></td>
+    <td><a href="article_edit.aspx?action=Edit&channel_id=1&id=74">799元360特供机：“海尔小潜艇”下周限量发售</a></td>
+    <td>智能手机</td>
+    <td>2012-10-20 13:42</td>
+    <td><input name="rptList1$ctl05$txtSortId" type="text" value="99" id="rptList1_ctl05_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td>
+      <div class="btn-tools">
+        <a id="rptList1_ctl05_lbtnIsMsg" title="取消评论" class="msg selected" href="javascript:__doPostBack('rptList1$ctl05$lbtnIsMsg','')"></a>
+        <a id="rptList1_ctl05_lbtnIsTop" title="设置置顶" class="top" href="javascript:__doPostBack('rptList1$ctl05$lbtnIsTop','')"></a>
+        <a id="rptList1_ctl05_lbtnIsRed" title="设置推荐" class="red" href="javascript:__doPostBack('rptList1$ctl05$lbtnIsRed','')"></a>
+        <a id="rptList1_ctl05_lbtnIsHot" title="设置热门" class="hot" href="javascript:__doPostBack('rptList1$ctl05$lbtnIsHot','')"></a>
+        <a id="rptList1_ctl05_lbtnIsSlide" title="设置幻灯片" class="pic" href="javascript:__doPostBack('rptList1$ctl05$lbtnIsSlide','')"></a>
+      </div>
+    </td>
+    <td align="center"><a href="article_edit.aspx?action=Edit&channel_id=1&id=74">修改</a></td>
+  </tr>
+
+  <tr>
+    <td align="center"><span class="checkall" style="vertical-align:middle;"><input id="rptList1_ctl06_chkId" type="checkbox" name="rptList1$ctl06$chkId" /></span><input type="hidden" name="rptList1$ctl06$hidId" id="rptList1_ctl06_hidId" value="73" /></td>
+    <td><a href="article_edit.aspx?action=Edit&channel_id=1&id=73">技术宅拯救世界：用纸糊一辆自行车</a></td>
+    <td>科技要闻</td>
+    <td>2012-10-20 13:40</td>
+    <td><input name="rptList1$ctl06$txtSortId" type="text" value="99" id="rptList1_ctl06_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td>
+      <div class="btn-tools">
+        <a id="rptList1_ctl06_lbtnIsMsg" title="取消评论" class="msg selected" href="javascript:__doPostBack('rptList1$ctl06$lbtnIsMsg','')"></a>
+        <a id="rptList1_ctl06_lbtnIsTop" title="设置置顶" class="top" href="javascript:__doPostBack('rptList1$ctl06$lbtnIsTop','')"></a>
+        <a id="rptList1_ctl06_lbtnIsRed" title="设置推荐" class="red" href="javascript:__doPostBack('rptList1$ctl06$lbtnIsRed','')"></a>
+        <a id="rptList1_ctl06_lbtnIsHot" title="设置热门" class="hot" href="javascript:__doPostBack('rptList1$ctl06$lbtnIsHot','')"></a>
+        <a id="rptList1_ctl06_lbtnIsSlide" title="设置幻灯片" class="pic" href="javascript:__doPostBack('rptList1$ctl06$lbtnIsSlide','')"></a>
+      </div>
+    </td>
+    <td align="center"><a href="article_edit.aspx?action=Edit&channel_id=1&id=73">修改</a></td>
+  </tr>
+
+  <tr>
+    <td align="center"><span class="checkall" style="vertical-align:middle;"><input id="rptList1_ctl07_chkId" type="checkbox" name="rptList1$ctl07$chkId" /></span><input type="hidden" name="rptList1$ctl07$hidId" id="rptList1_ctl07_hidId" value="72" /></td>
+    <td><a href="article_edit.aspx?action=Edit&channel_id=1&id=72">iPad Mini 23日登场</a></td>
+    <td>平板电脑</td>
+    <td>2012-10-20 13:37</td>
+    <td><input name="rptList1$ctl07$txtSortId" type="text" value="99" id="rptList1_ctl07_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td>
+      <div class="btn-tools">
+        <a id="rptList1_ctl07_lbtnIsMsg" title="取消评论" class="msg selected" href="javascript:__doPostBack('rptList1$ctl07$lbtnIsMsg','')"></a>
+        <a id="rptList1_ctl07_lbtnIsTop" title="设置置顶" class="top" href="javascript:__doPostBack('rptList1$ctl07$lbtnIsTop','')"></a>
+        <a id="rptList1_ctl07_lbtnIsRed" title="设置推荐" class="red" href="javascript:__doPostBack('rptList1$ctl07$lbtnIsRed','')"></a>
+        <a id="rptList1_ctl07_lbtnIsHot" title="设置热门" class="hot" href="javascript:__doPostBack('rptList1$ctl07$lbtnIsHot','')"></a>
+        <a id="rptList1_ctl07_lbtnIsSlide" title="设置幻灯片" class="pic" href="javascript:__doPostBack('rptList1$ctl07$lbtnIsSlide','')"></a>
+      </div>
+    </td>
+    <td align="center"><a href="article_edit.aspx?action=Edit&channel_id=1&id=72">修改</a></td>
+  </tr>
+
+  <tr>
+    <td align="center"><span class="checkall" style="vertical-align:middle;"><input id="rptList1_ctl08_chkId" type="checkbox" name="rptList1$ctl08$chkId" /></span><input type="hidden" name="rptList1$ctl08$hidId" id="rptList1_ctl08_hidId" value="71" /></td>
+    <td><a href="article_edit.aspx?action=Edit&channel_id=1&id=71">Win8，最后的Windows操作系统</a></td>
+    <td>软媒动态</td>
+    <td>2012-10-20 13:26</td>
+    <td><input name="rptList1$ctl08$txtSortId" type="text" value="99" id="rptList1_ctl08_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td>
+      <div class="btn-tools">
+        <a id="rptList1_ctl08_lbtnIsMsg" title="取消评论" class="msg selected" href="javascript:__doPostBack('rptList1$ctl08$lbtnIsMsg','')"></a>
+        <a id="rptList1_ctl08_lbtnIsTop" title="设置置顶" class="top" href="javascript:__doPostBack('rptList1$ctl08$lbtnIsTop','')"></a>
+        <a id="rptList1_ctl08_lbtnIsRed" title="设置推荐" class="red" href="javascript:__doPostBack('rptList1$ctl08$lbtnIsRed','')"></a>
+        <a id="rptList1_ctl08_lbtnIsHot" title="设置热门" class="hot" href="javascript:__doPostBack('rptList1$ctl08$lbtnIsHot','')"></a>
+        <a id="rptList1_ctl08_lbtnIsSlide" title="设置幻灯片" class="pic" href="javascript:__doPostBack('rptList1$ctl08$lbtnIsSlide','')"></a>
+      </div>
+    </td>
+    <td align="center"><a href="article_edit.aspx?action=Edit&channel_id=1&id=71">修改</a></td>
+  </tr>
+
+  <tr>
+    <td align="center"><span class="checkall" style="vertical-align:middle;"><input id="rptList1_ctl09_chkId" type="checkbox" name="rptList1$ctl09$chkId" /></span><input type="hidden" name="rptList1$ctl09$hidId" id="rptList1_ctl09_hidId" value="70" /></td>
+    <td><a href="article_edit.aspx?action=Edit&channel_id=1&id=70">华为神秘新机Ascend Mate曝光：6.1英寸+四核</a></td>
+    <td>智能手机</td>
+    <td>2012-10-20 13:24</td>
+    <td><input name="rptList1$ctl09$txtSortId" type="text" value="99" id="rptList1_ctl09_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td>
+      <div class="btn-tools">
+        <a id="rptList1_ctl09_lbtnIsMsg" title="设置评论" class="msg" href="javascript:__doPostBack('rptList1$ctl09$lbtnIsMsg','')"></a>
+        <a id="rptList1_ctl09_lbtnIsTop" title="设置置顶" class="top" href="javascript:__doPostBack('rptList1$ctl09$lbtnIsTop','')"></a>
+        <a id="rptList1_ctl09_lbtnIsRed" title="设置推荐" class="red" href="javascript:__doPostBack('rptList1$ctl09$lbtnIsRed','')"></a>
+        <a id="rptList1_ctl09_lbtnIsHot" title="设置热门" class="hot" href="javascript:__doPostBack('rptList1$ctl09$lbtnIsHot','')"></a>
+        <a id="rptList1_ctl09_lbtnIsSlide" title="设置幻灯片" class="pic" href="javascript:__doPostBack('rptList1$ctl09$lbtnIsSlide','')"></a>
+      </div>
+    </td>
+    <td align="center"><a href="article_edit.aspx?action=Edit&channel_id=1&id=70">修改</a></td>
+  </tr>
+
+  <tr>
+    <td align="center"><span class="checkall" style="vertical-align:middle;"><input id="rptList1_ctl10_chkId" type="checkbox" name="rptList1$ctl10$chkId" /></span><input type="hidden" name="rptList1$ctl10$hidId" id="rptList1_ctl10_hidId" value="69" /></td>
+    <td><a href="article_edit.aspx?action=Edit&channel_id=1&id=69">微软宣布Office365大学生版：十个理由让你爱她</a></td>
+    <td>软媒动态</td>
+    <td>2012-10-20 13:22</td>
+    <td><input name="rptList1$ctl10$txtSortId" type="text" value="99" id="rptList1_ctl10_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td>
+      <div class="btn-tools">
+        <a id="rptList1_ctl10_lbtnIsMsg" title="取消评论" class="msg selected" href="javascript:__doPostBack('rptList1$ctl10$lbtnIsMsg','')"></a>
+        <a id="rptList1_ctl10_lbtnIsTop" title="设置置顶" class="top" href="javascript:__doPostBack('rptList1$ctl10$lbtnIsTop','')"></a>
+        <a id="rptList1_ctl10_lbtnIsRed" title="设置推荐" class="red" href="javascript:__doPostBack('rptList1$ctl10$lbtnIsRed','')"></a>
+        <a id="rptList1_ctl10_lbtnIsHot" title="设置热门" class="hot" href="javascript:__doPostBack('rptList1$ctl10$lbtnIsHot','')"></a>
+        <a id="rptList1_ctl10_lbtnIsSlide" title="设置幻灯片" class="pic" href="javascript:__doPostBack('rptList1$ctl10$lbtnIsSlide','')"></a>
+      </div>
+    </td>
+    <td align="center"><a href="article_edit.aspx?action=Edit&channel_id=1&id=69">修改</a></td>
+  </tr>
+
+
+</table>
+
+<!--/文字列表-->
+
+<!--图片列表-->
+
+<!--/图片列表-->
+
+<!--内容底部-->
+<div class="line20"></div>
+<div class="pagelist">
+  <div class="l-btns">
+    <span>显示</span><input name="txtPageNum" type="text" value="10" onchange="javascript:setTimeout('__doPostBack(\'txtPageNum\',\'\')', 0)" onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;" id="txtPageNum" class="pagenum" onkeydown="return checkNumber(event);" /><span>条/页</span>
+  </div>
+  <div id="PageContent" class="default"><span>共30记录</span>
+      
+      
+      <span class="disabled"><<上一页</span><span class="current">1</span><a href="article_list.aspx?channel_id=1&page=2">2</a><a href="article_list.aspx?channel_id=1&page=3">3</a><a href="article_list.aspx?channel_id=1&page=2">下一页>></a></div>
+
+
+</div>
+<!--/内容底部-->
+</form>
+</div>
+</body>
+</html>

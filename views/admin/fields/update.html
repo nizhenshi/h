@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>新增信息</title>
+  <link href="/static/dtcms2/admin/skin/default/style.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="/static/js/zTree/css/demo.css" type="text/css">
+  <link rel="stylesheet" href="/static/js/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+  <script type="text/javascript" src="/static/dtcms2/scripts/jquery/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="/static/js/Validform/Validform_v5.3.2_min.js"></script>
+  <script type="text/javascript" src="/static/js/lhgdialog/lhgdialog.js?skin=idialog"></script>
+  <script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/scripts/swfupload/swfupload.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/scripts/swfupload/swfupload.queue.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/scripts/swfupload/swfupload.handlers.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/admin/js/layout.js"></script>
+  <script type="text/javascript" src="/static/js/zTree/js/jquery.ztree.core-3.5.js"></script>
+  <script type="text/javascript">
+    $(function () {
+        //初始化表单验证
+        $("#form1").initValidform();
+        //初始化上传控件
+        $(".upload-img").each(function () {
+             $(this).InitSWFUpload({ sendurl: "/admin/ue/swfupload", flashurl: "/static/dtcms2/scripts/swfupload/swfupload.swf" });
+        });
+    });
+</script>
+</head>
+<body>
+  <!--导航栏-->
+  <div class="location">
+    <a href="/admin/fields/list" class="back fr"> <i></i>
+      <span>返回列表页</span>
+    </a>
+    <a href="/admin/center" class="home"> <i></i>
+      <span>首页</span>
+    </a>
+    <i class="arrow"></i>
+    <a href="/admin/fields/list">
+      <span>字段管理</span>
+    </a>
+    <i class="arrow"></i>
+    <span>更新信息</span>
+  </div>
+  <div class="line10"></div>
+  <!--/导航栏-->
+  <div class="mainbody">
+    <form name="form1" method="post" action="/admin/fields/update" id="form1">
+    {{$cat_name := .CatName}}
+    {{with .Fields}}
+    <input type="hidden" name="Id" value="{{.Id}}" />
+    <input type="hidden" name="Typeid" value="{{.Typeid}}" />
+      <div class="content-tab-wrap">
+        <div id="floatHead" class="content-tab">
+          <div class="content-tab-ul-wrap">
+            <ul>
+              <li>
+                <a href="javascript:;" onclick="tabs(this);" class="selected">基本信息</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content">
+        <dl>
+          <dt>所属类别</dt>
+          <dd>
+            <input type="hidden" id="CategoryId" name="Catid" value="{{.Catid}}" />
+            <input type="text" value="{{$cat_name}}" readonly onclick="showMenu(); return false;" class="input normal" id="ParentTitle" datatype="*1-100" sucmsg="" />
+            <span class="Validform_checktip">*选择父菜单</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>字段</dt>
+          <dd>
+            <input name="Name" value="{{.Name}}" type="text"   ajaxurl="/admin/product/NameUnique?id=2"  class="input normal" datatype="*1-20" sucmsg=" " />
+            <span class="Validform_checktip">*1-20字母</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>字段标题</dt>
+          <dd>
+            <input name="Title" value="{{.Title}}" type="text" class="input normal" datatype="*2-100" sucmsg=" " />
+            <span class="Validform_checktip">*字段标题最多100个字符</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>表单类型</dt>
+          <dd>
+            <select class="select" name="HtmlType" datatype="*" nullmsg="请选择类型！" errormsg="请选择类型！">
+              <option {{if eq .HtmlType "text"}}selected="selected"{{end}} value="text">单行文本(text)</option>
+              <option {{if eq .HtmlType "textarea"}}selected="selected"{{end}} value="textarea">多行文本(textarea)</option>
+              <option {{if eq .HtmlType "select"}}selected="selected"{{end}} value="select">下拉框(select)</option>
+              <option {{if eq .HtmlType "checkbox"}}selected="selected"{{end}} value="checkbox">多选框(checkbox)</option>
+              <option {{if eq .HtmlType "date"}}selected="selected"{{end}} value="date">日期选择(date)</option>
+              <option {{if eq .HtmlType "thumb"}}selected="selected"{{end}} value="thumb">图片上传(thumb)</option>
+              <option {{if eq .HtmlType "file"}}selected="selected"{{end}} value="file">文件上传(file)</option>
+              <option {{if eq .HtmlType "editor"}}selected="selected"{{end}} value="editor">网页编辑器(editor)</option>
+            </select>
+            <span class="Validform_checktip">*字段html属性</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>输入限制</dt>
+          <dd>
+            <input name="InputLimit" value="{{.InputLimit}}" type="text" class="input" />
+            <select class="select" id="InputLimit">
+              <option {{if eq .InputLimit ""}}selected="selected"{{end}} value="">无限制</option>
+              <option {{if eq .InputLimit "*"}}selected="selected"{{end}} value="*">不能为空</option>
+              <option {{if eq .InputLimit "n"}}selected="selected"{{end}} value="n">数字</option>
+              <option {{if eq .InputLimit "s"}}selected="selected"{{end}} value="s">字符串</option>
+              <option {{if eq .InputLimit "e"}}selected="selected"{{end}} value="e">邮箱</option>
+              <option {{if eq .InputLimit "url"}}selected="selected"{{end}} value="url">网址</option>
+              <option {{if eq .InputLimit "m"}}selected="selected"{{end}} value="m">手机号</option>
+            </select>
+            <span class="Validform_checktip">*字段输入的规则</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>提示信息</dt>
+          <dd>
+            <input name="Note" value="{{.Note}}" type="text" class="input normal" />
+            <span class="Validform_checktip">*字段不符合规则时提示的错误信息</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>默认值</dt>
+          <dd>
+            <textarea class="input" name="DefaultValue">{{.DefaultValue}}</textarea>
+            <span class="Validform_checktip">多个值用 "#" 分隔</span>
+          </dd>
+        </dl>
+        <dl id="fieldMult" {{if eq .HtmlType "select" "radio" "checkbox"}}{{else}}style="display: none"{{end}}>
+          <dt>选项值</dt>
+          <dd>
+            <textarea class="input" name="OptionValue">{{.OptionValue}}</textarea>
+            <span class="Validform_checktip">多个值用 "#" 分隔</span>
+          </dd>
+        </dl>
+        <dl id="fieldThumb" {{if ne .HtmlType "thumb"}}style="display: none"{{end}}>
+          <dt>图片宽高</dt>
+          <dd>
+            <input type="text" name="Width" value="{{.Width}}" class="input small" />  X  <input type="text" name="Height" value="{{.Height}}" class="input small" />
+            <span class="Validform_checktip">*适用于图片</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>显示状态</dt>
+          <dd>
+            <div class="rule-multi-radio">
+              <span id="rblStatus">
+                <input  type="radio" name="Status" value="1" {{if eq .Status 1}}checked="checked"{{end}} />
+                <label>显示</label>
+                <input  type="radio" name="Status" value="0" {{if eq .Status 0}}checked="checked"{{end}} />
+                <label>隐藏</label>
+              </span>
+            </div>
+          </dd>
+        </dl>
+        
+        <dl>
+          <dt>排序数字</dt>
+          <dd>
+            <input name="OrderTop" value="{{.Resort}}" type="text" value="0" class="input small" datatype="n" sucmsg=" " />
+            <span class="Validform_checktip">*数字，越小越向前</span>
+          </dd>
+        </dl>
+        <br />
+        <dl>
+          <dt></dt>
+          <dd>
+            <input type="submit" name="btnSubmit" value="提交保存" id="btnSubmit" class="btn" />
+            <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+          </dd>
+        </dl> 
+      </div>
+    {{end}}
+    </form>
+  </div>
+  <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+    <ul id="treeDemo" class="ztree" style="margin-top:0; width:200px;"></ul>
+  </div>
+  <script type="text/javascript">
+    var setting = {
+      view: {
+        dblClickExpand: false,
+        showIcon: false
+      },
+      data: {
+        simpleData: {
+          enable: true
+        }
+      },
+      callback: {
+        beforeClick: beforeClick,
+        onClick: onClick
+      }
+    };
+    var zNodes =  eval('(' + {{.List}} + ')');
+    function beforeClick(treeId, treeNode) {
+    }
+    function onClick(e, treeId, treeNode) {
+      var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+      nodes = zTree.getSelectedNodes(),
+      v = "";
+      nodes.sort(function compare(a,b){return a.id-b.id;});
+      for (var i=0, l=nodes.length; i<l; i++) {
+        v += nodes[i].name + ",";
+      }
+      if (v.length > 0 ) v = v.substring(0, v.length-1);
+      var cityObj = $("#ParentTitle");
+      cityObj.attr("value", v);
+      $("#CategoryId").val(treeNode.id);
+    }
+    function showMenu() {
+      var cityObj = $("#ParentTitle");
+      var cityOffset = $("#ParentTitle").offset();
+      $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+      $("body").bind("mousedown", onBodyDown);
+    }
+    function hideMenu() {
+      $("#menuContent").fadeOut("fast");
+      $("body").unbind("mousedown", onBodyDown);
+    }
+    function onBodyDown(event) {
+      if (!(event.target.id == "ParentTitle" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+        hideMenu();
+      }
+    }
+    $(document).ready(function(){
+      $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+  </script>
+
+  <script type="text/javascript">
+
+  $("select[name='HtmlType']").change(function(){  
+    html_type = $(this).val();
+
+    if (html_type == "thumb") {
+      $("#fieldThumb").show();
+    }else{
+      $("#fieldThumb").hide();
+    }
+
+    if (html_type == 'select' || html_type == 'radio' || html_type == 'checkbox') {
+      $("#fieldMult").show();
+    }else {
+      $("#fieldMult").hide();
+    }
+  })
+
+  $("#InputLimit").change(function(){
+    $("input[name='InputLimit']").val($(this).val());
+  })  
+
+</script>
+
+  {{.alert}}
+</body>
+</html>

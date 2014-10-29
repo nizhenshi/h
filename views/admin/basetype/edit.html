@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>编辑信息</title>
+  <link href="/static/dtcms2/admin/skin/default/style.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="/static/js/zTree/css/demo.css" type="text/css">
+  <link rel="stylesheet" href="/static/js/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+</head>
+<body class="mainbody">
+
+  <!--导航栏-->
+  <div class="location">
+
+    <a href="javascript:history.back(-1);" class="back"> <i></i>
+      <span>返回上一页</span>
+    </a>
+    <a href="/admin/center" class="home"> <i></i>
+      <span>首页</span>
+    </a>
+    <i class="arrow"></i>
+    <a href="/admin/basetype/list">
+      <span>类别列表</span>
+    </a>
+    <i class="arrow"></i>
+    <span>编辑信息</span>
+  </div>
+  <div class="line10"></div>
+  <!--/导航栏-->
+
+  <!--内容-->
+  <div class="content-tab-wrap">
+    <div id="floatHead" class="content-tab">
+      <div class="content-tab-ul-wrap">
+        <ul>
+          <li>
+            <a href="javascript:;" onclick="tabs(this);" class="selected">基本信息</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <form name="form1" method="post" action="/admin/basetype/editpost" id="form1">
+    <input type="hidden" id="Id" name="Id" value="{{.Id}}" />
+     <input type="hidden" id="menuRootId" name="menuRootId" value="{{.menuRootId}}" />
+    <div class="tab-content">
+      <dl>
+        <dt>父级菜单</dt>
+        <dd>
+          <input type="hidden" id="ParentId" name="ParentId" value="{{.ParentId}}" />
+          <input onclick="showMenu(); return false;" type="text" value="{{.ParentName}}" id="ParentTitle" class="input normal" datatype="*2-100" sucmsg=" " />
+          <span class="Validform_checktip">*选择父菜单</span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>显示状态</dt>
+        <dd>
+          <div class="rule-multi-radio">
+            <span id="rblStatus">
+            {{GetRadioRecommendStatus2 "basetypeStatus" .IsShow "IsShow"}}
+            </span>
+          </div>
+        </dd>
+      </dl>
+      <dl>
+        <dt>类别标题</dt>
+        <dd>
+          <input name="Title" type="text" value="{{.Title}}" class="input normal" datatype="*2-100" sucmsg=" " />
+          <span class="Validform_checktip">*标题最多100个字符</span>
+        </dd>
+      </dl>
+
+      <dl>
+        <dt>类别图片</dt>
+        <dd>
+          <input name="ImageUrl" type="text" value="{{.ImageUrl}}" datatype="*0-100" sucmsg=" "  class="input normal upload-path" />
+          <div class="upload-box upload-img"></div>
+        </dd>
+      </dl>
+
+      <dl>
+        <dt>排序数字</dt>
+        <dd>
+          <input name="OrderTop" type="text" value="{{.OrderTop}}"  class="input small" datatype="n" sucmsg=" " />
+          <span class="Validform_checktip">*数字，越小越向前</span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>类别描述</dt>
+        <dd>
+          <input name="Describe" type="text" value="{{.Describe}}" class="input normal" datatype="*0-100" sucmsg=" " />
+          <span class="Validform_checktip">*最多100个字符</span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>添加时间</dt>
+        <dd>
+          <div class="input-date">
+            <input name="Date" type="text" value="{{.Date}}" id="txtAddTime" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}\s{1}(\d{1,2}:){2}\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" " />
+            <i>日期</i>
+          </div>
+          <span class="Validform_checktip">不选择默认当前发布时间</span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>简要备注</dt>
+        <dd>
+          <textarea name="Remark" rows="2" cols="40" style="width:600px;" class="input"  datatype="*0-255" sucmsg=" ">{{.Remark}}</textarea>
+          <span class="Validform_checktip ">0-255个字符</span>
+        </dd>
+      </dl>
+    </div>
+    <div class="page-footer">
+      <div class="btn-list">
+        <input type="submit" name="btnSubmit" value="提交保存" id="btnSubmit" class="btn" />
+        <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+      </div>
+      <div class="clear"></div>
+    </div>
+  </form>
+  <script type="text/javascript" src="/static/dtcms2/scripts/jquery/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="/static/js/Validform/Validform_v5.3.2_min.js"></script>
+  <script type="text/javascript" src="/static/js/lhgdialog/lhgdialog.js?skin=idialog"></script>
+  <script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/scripts/swfupload/swfupload.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/scripts/swfupload/swfupload.queue.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/scripts/swfupload/swfupload.handlers.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/admin/js/layout.js"></script>
+  <script type="text/javascript" src="/static/js/zTree/js/jquery.ztree.core-3.5.js"></script>
+  <script type="text/javascript">
+    $(function () {
+        //初始化表单验证
+        $("#form1").initValidform();
+        //初始化图片上传控件
+        $(".upload-img").each(function () {
+            $(this).InitSWFUpload({ sendurl: "/admin/ue/swfupload", flashurl: "/static/dtcms2/scripts/swfupload/swfupload.swf" });
+        });
+    });
+</script>
+  <!-- zTree  begin -->
+  <SCRIPT type="text/javascript">
+    var setting = {
+      view: {
+        dblClickExpand: false,
+        showIcon: false
+      },
+      data: {
+        simpleData: {
+          enable: true
+        }
+      },
+      callback: {
+        beforeClick: beforeClick,
+        onClick: onClick
+      }
+    };
+
+    var zNodes =  eval('(' + {{.strParentMenuList}} + ')');
+
+    function beforeClick(treeId, treeNode) {
+      // var check = (treeNode && !treeNode.isParent);
+      // if (!check) alert("只能选择城市...");
+      // return check;
+    }
+    
+    function onClick(e, treeId, treeNode) {
+      var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+      nodes = zTree.getSelectedNodes(),
+      v = "";
+      nodes.sort(function compare(a,b){return a.id-b.id;});
+      for (var i=0, l=nodes.length; i<l; i++) {
+        v += nodes[i].name + ",";
+      }
+      if (v.length > 0 ) v = v.substring(0, v.length-1);
+      var cityObj = $("#ParentTitle");
+      cityObj.attr("value", v);
+      $("#ParentId").val(treeNode.id);
+    }
+
+    function showMenu() {
+      var cityObj = $("#ParentTitle");
+      var cityOffset = $("#ParentTitle").offset();
+      $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+      $("body").bind("mousedown", onBodyDown);
+    }
+    function hideMenu() {
+      $("#menuContent").fadeOut("fast");
+      $("body").unbind("mousedown", onBodyDown);
+    }
+    function onBodyDown(event) {
+      if (!(event.target.id == "ParentTitle" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+        hideMenu();
+      }
+    }
+
+    $(document).ready(function(){
+      $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+  </SCRIPT>
+  <!-- zTree  end-->
+  <!-- 下面这个div是ztree必须的 -->
+  <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+    <ul id="treeDemo" class="ztree" style="margin-top:0; width:200px;"></ul>
+  </div>
+  <!-- 下面这个是用来提示js的 -->
+  {{.alert}}
+</body>
+</html>

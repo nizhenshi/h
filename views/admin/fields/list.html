@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>内容列表</title>
+  <script type="text/javascript" src="/static/dtcms2/scripts/jquery/jquery-1.10.2.min.js"></script>
+  <link href="/static/dtcms2/admin/skin/default/style.css" rel="stylesheet" type="text/css" />
+  <link  href="/static/dtcms2/css/pagination.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="/static/js/toolTip/jquery.toolTip.js"></script>
+  <script type="text/javascript" src="/static/js/lhgdialog/lhgdialog.js?skin=idialog"></script>
+</head>
+
+<body>
+  <!--该JS与tooltipjs不兼容
+<script type="text/javascript" src="/static/js/lhgdialog/lhgdialog.js?skin=idialog"></script>
+-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back fr"> <i></i>
+    <span>返回上一页</span>
+  </a>
+  <a href="../center.aspx" class="home"> <i></i>
+    <span>首页</span>
+  </a>
+  <i class="arrow"></i>
+  <span>字段列表</span>
+</div>
+<!--/导航栏-->
+<div class="mainbody">
+  <form name="form1" method="post" action="" id="form1">
+
+    <!--工具栏-->
+    <div class="toolbar-wrap">
+      <div id="floatHead" class="toolbar">
+        <div class="l-list">
+          <ul class="icon-list">
+            <li>
+              <a class="all"  href="javascript:;">
+                <i></i>
+                <span id="quanxuan">全选</span>
+              </a>
+            </li>
+            <li>
+              <a class="add" href='/admin/fields/add?typeid={{.Typeid}}'>
+                <i></i>
+                <span>新增</span>
+              </a>
+            </li>
+            <li>
+              <a class="btn btn-success" id="delMulti">
+                <i></i>
+                <span>删除</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="r-list">
+          <input name="txtKeywords" type="text" id="txtKeywords" class="keyword" style="width:200px" />
+          <a id="lbtnSearch" class="btn-search" href="javascript:__doPostBack('lbtnSearch','')">查询</a>
+        </div>
+      </div>
+    </div>
+    <!--/工具栏-->
+
+    <!--文字列表-->
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
+      <tr>
+        <th width="6%">选择</th>
+        <th align="left">分类</th>
+        <th align="left">字段</th>
+        <th align="left">字段名称</th>
+        <th align="left">字段类型</th>
+        <th align="left">排序</th>
+        <th align="left">状态</th>
+        <th width="8%">操作</th>
+      </tr>
+      {{range .Fields}}
+      <tr>
+        <td align="center">
+          <span class="checkall" style="vertical-align:middle;">
+            <input class="checkbox itemId" type="checkbox" value="{{.Id}}" />
+          </span>
+        </td>
+        <td>
+          {{GetBaseTitle .Catid}}
+        </td>
+        <td>
+          {{.Name}}
+        </td>
+        <td>
+          <a href="#">{{.Title}}</a>
+        </td>
+        <td>{{.HtmlType}}</td>
+        <td><input type="text" value="{{.Resort}}" fid="{{.Id}}" class="sort" /></td>
+        <td>
+          {{if eq .Status 1}}显示{{else}}隐藏{{end}}
+        </td>
+        <td align="center">
+          <a href="/admin/fields/update?id={{.Id}}">修改</a>
+        </td>
+      </tr>
+      {{end}}
+    </table>
+  <div class="line20"></div>
+  <div class="pagelist">
+    <div class="l-btns">
+      <span>显示</span>
+      <input  type="text" value="{{.PageSize}}"  class="pagenum"  />
+      <span>条/页</span>
+    </div>
+    <div  class="default">
+      <span>共{{.totalItem}}记录</span>
+      <div style="float:left;">{{.pagerhtml}}</div>
+    </div>
+
+  </div>
+  <!--/内容底部-->
+</form>
+</div>
+<script language="javascript" type="text/javascript">  
+ /**
+  * [description]
+  * 全选，以及取消全选
+  */
+ $().ready(function(){
+    $("#quanxuan").click(function() {
+        var txt=$("#quanxuan").text();
+        if (txt=="全选") {
+                $(".checkbox").each(function() {
+                 this.checked = true;
+                });
+                $("#quanxuan").text("反选")
+
+        }else if (txt=="反选"){
+                $(".checkbox").each(function() {
+                  this.checked = false;
+                });
+                $("#quanxuan").text("全选")
+        }
+     });
+
+// 批量删除
+    multi_ids = "";
+
+    $("#delMulti").click(function(){
+      $(".itemId").each(function(){
+
+        if ($(this).prop("checked")) {
+          multi_ids += $(this).val() + ",";
+        }
+        
+      })
+
+      str_len = multi_ids.length;
+      multiIds = multi_ids.substring(0,str_len-1)
+      
+      if (multiIds != "") {
+            $.dialog({
+              id: 'testID2',
+              icon: 'error.gif',
+              titleIcon: 'lhgcore.gif',
+              title: '提示',
+              max: false,
+              min: false,
+              content: '删除后将无法恢复！',
+              ok: function(){
+                  $.post("/admin/fields/delete", {"ids":multiIds}, function(data){
+                  if (data == "y") {
+                    $.dialog.tips('删除成功！',3,'succ.png',function(){this.reload();});
+                  }else {
+                    $.dialog.tips('对不起，读取数据失败',5,'fail.png');
+                  }
+                })
+              },
+              cancel: true 
+
+       });
+
+
+
+        
+      }else {
+       $.dialog({
+              id: 'testID2',
+               icon: 'error.gif',
+              titleIcon: 'lhgcore.gif',
+
+              time: 3,
+              title: '提示',
+              max: false,
+              min: false,
+              content: '对不起，请选择删除项！'
+       });
+    }
+    })
+
+// 重新排序
+  $(".sort").blur(function(){
+      fresort = $(this).val();
+      fid = $(this).attr("fid");
+
+      $.get("/admin/fields/resort", {"fid":fid, "fresort":fresort}, function(data){
+        if (data == "y") {
+          $.dialog.tips('排序成功！',2,'succ.png',function(){this.reload();});
+        }else {
+          $.dialog.tips('对不起，读取数据失败',3,'fail.png');
+        }
+      })
+  })
+
+  });
+</script>
+
+<span id="alertMsg"></span>
+</body>
+</html>

@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>内容类别</title>
+<script type="text/javascript" src="../../scripts/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../../scripts/lhgdialog/lhgdialog.js?skin=idialog"></script>
+<script type="text/javascript" src="../js/layout.js"></script>
+<link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back fr"><i></i><span>返回上一页</span></a>
+  <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
+  <i class="arrow"></i>
+  <span>内容类别</span>
+</div>
+<!--/导航栏-->
+<div class="mainbody">
+<form name="form1" method="post" action="category_list.aspx?channel_id=1" id="form1">
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<div>
+
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWJwK6jbT4AgKct7iSDALLx9PKBQLawsWjAgK8gLWQAQKUus7dAwLYgOuoAQK5wsWjAgKdgLWQAQKTss7dAwLZ+OqoAQKQxMWjAgKGgrWQAQKe7r7dAwLitOOoAQL3wcWjAgLf/7SQAQKVos7dAwLb6OqoAQLWwcWjAgLA/7SQAQKgms7dAwLk4OqoAQK1wcWjAgKh/7SQAQKfks7dAwLl2OqoAQKcw8WjAgL6gLWQAQKays7dAwLekOuoAQLzxMWjAgLjgrWQAQKhhr/dAwLnzOOoAQLSxMWjAgLEgrWQAQKc/r7dAwLgxOOoAR90SKd2kJ21wTjxeOu1SmrMBP2X" />
+</div>
+<!--工具栏-->
+<div class="toolbar-wrap">
+  <div id="floatHead" class="toolbar">
+    <div class="l-list">
+      <ul class="icon-list">
+        <li><a class="add" href="category_edit.aspx?action=Add&channel_id=1"><i></i><span>新增</span></a></li>
+        <li><a id="btnSave" class="save" href="javascript:__doPostBack('btnSave','')"><i></i><span>保存</span></a></li>
+        <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
+        <li><a onclick="return ExePostBack('btnDelete','本操作会删除本类别及下属子类别，是否继续？');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
+  <tr>
+    <th width="6%">选择</th>
+    <th align="left" width="6%">编号</th>
+    <th align="left">类别名称</th>
+    <th align="left" width="12%">调用别名</th>
+    <th align="left" width="12%">排序</th>
+    <th width="12%">操作</th>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;"><input id="rptList_ctl01_chkId" type="checkbox" name="rptList$ctl01$chkId" /></span>
+      <input type="hidden" name="rptList$ctl01$hidId" id="rptList_ctl01_hidId" value="1" />
+      <input type="hidden" name="rptList$ctl01$hidLayer" id="rptList_ctl01_hidLayer" value="1" />
+    </td>
+    <td>1</td>
+    <td>
+      <span class="folder-open"></span>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=1">IT资讯</a>
+    </td>
+    <td></td>
+    <td><input name="rptList$ctl01$txtSortId" type="text" value="99" id="rptList_ctl01_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td align="center">
+      <a href="category_edit.aspx?action=Add&channel_id=1&id=1">添加子类</a>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=1">修改</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;"><input id="rptList_ctl02_chkId" type="checkbox" name="rptList$ctl02$chkId" /></span>
+      <input type="hidden" name="rptList$ctl02$hidId" id="rptList_ctl02_hidId" value="3" />
+      <input type="hidden" name="rptList$ctl02$hidLayer" id="rptList_ctl02_hidLayer" value="2" />
+    </td>
+    <td>3</td>
+    <td>
+      <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=3">IT业界</a>
+    </td>
+    <td></td>
+    <td><input name="rptList$ctl02$txtSortId" type="text" value="100" id="rptList_ctl02_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td align="center">
+      <a href="category_edit.aspx?action=Add&channel_id=1&id=3">添加子类</a>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=3">修改</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;"><input id="rptList_ctl03_chkId" type="checkbox" name="rptList$ctl03$chkId" /></span>
+      <input type="hidden" name="rptList$ctl03$hidId" id="rptList_ctl03_hidId" value="4" />
+      <input type="hidden" name="rptList$ctl03$hidLayer" id="rptList_ctl03_hidLayer" value="2" />
+    </td>
+    <td>4</td>
+    <td>
+      <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=4">软媒动态</a>
+    </td>
+    <td></td>
+    <td><input name="rptList$ctl03$txtSortId" type="text" value="101" id="rptList_ctl03_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td align="center">
+      <a href="category_edit.aspx?action=Add&channel_id=1&id=4">添加子类</a>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=4">修改</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;"><input id="rptList_ctl04_chkId" type="checkbox" name="rptList$ctl04$chkId" /></span>
+      <input type="hidden" name="rptList$ctl04$hidId" id="rptList_ctl04_hidId" value="5" />
+      <input type="hidden" name="rptList$ctl04$hidLayer" id="rptList_ctl04_hidLayer" value="2" />
+    </td>
+    <td>5</td>
+    <td>
+      <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=5">科技要闻</a>
+    </td>
+    <td></td>
+    <td><input name="rptList$ctl04$txtSortId" type="text" value="102" id="rptList_ctl04_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td align="center">
+      <a href="category_edit.aspx?action=Add&channel_id=1&id=5">添加子类</a>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=5">修改</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;"><input id="rptList_ctl05_chkId" type="checkbox" name="rptList$ctl05$chkId" /></span>
+      <input type="hidden" name="rptList$ctl05$hidId" id="rptList_ctl05_hidId" value="6" />
+      <input type="hidden" name="rptList$ctl05$hidLayer" id="rptList_ctl05_hidLayer" value="1" />
+    </td>
+    <td>6</td>
+    <td>
+      <span class="folder-open"></span>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=6">数码产品</a>
+    </td>
+    <td></td>
+    <td><input name="rptList$ctl05$txtSortId" type="text" value="100" id="rptList_ctl05_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td align="center">
+      <a href="category_edit.aspx?action=Add&channel_id=1&id=6">添加子类</a>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=6">修改</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;"><input id="rptList_ctl06_chkId" type="checkbox" name="rptList$ctl06$chkId" /></span>
+      <input type="hidden" name="rptList$ctl06$hidId" id="rptList_ctl06_hidId" value="7" />
+      <input type="hidden" name="rptList$ctl06$hidLayer" id="rptList_ctl06_hidLayer" value="2" />
+    </td>
+    <td>7</td>
+    <td>
+      <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=7">笔记本电脑</a>
+    </td>
+    <td></td>
+    <td><input name="rptList$ctl06$txtSortId" type="text" value="99" id="rptList_ctl06_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td align="center">
+      <a href="category_edit.aspx?action=Add&channel_id=1&id=7">添加子类</a>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=7">修改</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;"><input id="rptList_ctl07_chkId" type="checkbox" name="rptList$ctl07$chkId" /></span>
+      <input type="hidden" name="rptList$ctl07$hidId" id="rptList_ctl07_hidId" value="8" />
+      <input type="hidden" name="rptList$ctl07$hidLayer" id="rptList_ctl07_hidLayer" value="2" />
+    </td>
+    <td>8</td>
+    <td>
+      <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=8">平板电脑</a>
+    </td>
+    <td></td>
+    <td><input name="rptList$ctl07$txtSortId" type="text" value="100" id="rptList_ctl07_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td align="center">
+      <a href="category_edit.aspx?action=Add&channel_id=1&id=8">添加子类</a>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=8">修改</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;"><input id="rptList_ctl08_chkId" type="checkbox" name="rptList$ctl08$chkId" /></span>
+      <input type="hidden" name="rptList$ctl08$hidId" id="rptList_ctl08_hidId" value="9" />
+      <input type="hidden" name="rptList$ctl08$hidLayer" id="rptList_ctl08_hidLayer" value="2" />
+    </td>
+    <td>9</td>
+    <td>
+      <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=9">智能手机</a>
+    </td>
+    <td></td>
+    <td><input name="rptList$ctl08$txtSortId" type="text" value="101" id="rptList_ctl08_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td align="center">
+      <a href="category_edit.aspx?action=Add&channel_id=1&id=9">添加子类</a>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=9">修改</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;"><input id="rptList_ctl09_chkId" type="checkbox" name="rptList$ctl09$chkId" /></span>
+      <input type="hidden" name="rptList$ctl09$hidId" id="rptList_ctl09_hidId" value="10" />
+      <input type="hidden" name="rptList$ctl09$hidLayer" id="rptList_ctl09_hidLayer" value="2" />
+    </td>
+    <td>10</td>
+    <td>
+      <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=10">超极本</a>
+    </td>
+    <td></td>
+    <td><input name="rptList$ctl09$txtSortId" type="text" value="102" id="rptList_ctl09_txtSortId" class="sort" onkeydown="return checkNumber(event);" /></td>
+    <td align="center">
+      <a href="category_edit.aspx?action=Add&channel_id=1&id=10">添加子类</a>
+      <a href="category_edit.aspx?action=Edit&channel_id=1&id=10">修改</a>
+    </td>
+  </tr>
+
+  
+</table>
+
+<!--/列表-->
+</form>
+</div>
+</body>
+</html>

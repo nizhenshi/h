@@ -1,0 +1,280 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>内容列表</title>
+<script type="text/javascript" src="../../scripts/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../../scripts/jquery/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="../../scripts/lhgdialog/lhgdialog.js?skin=idialog"></script>
+<script type="text/javascript" src="../js/layout.js"></script>
+<link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
+<link  href="../../css/pagination.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    $(function () {
+        imgLayout();
+        $(window).resize(function () {
+            imgLayout();
+        });
+        //图片延迟加载
+        $(".pic img").lazyload({ load: AutoResizeImage, effect: "fadeIn" });
+        //点击图片链接
+        $(".pic img").click(function () {
+            //$.dialog({ lock: true, title: "查看大图", content: "<img src=\"" + $(this).attr("src") + "\" />", padding: 0 });
+            var linkUrl = $(this).parent().parent().find(".foot a").attr("href");
+            if (linkUrl != "") {
+                location.href = linkUrl; //跳转到修改页面
+            }
+        });
+    });
+    //排列图文列表
+    function imgLayout() {
+        var imgWidth = $(".imglist").width();
+        var lineCount = Math.floor(imgWidth / 222);
+        var lineNum = imgWidth % 222 / (lineCount - 1);
+        $(".imglist ul").width(imgWidth + Math.ceil(lineNum));
+        $(".imglist ul li").css("margin-right", parseFloat(lineNum));
+    }
+    //等比例缩放图片大小
+    function AutoResizeImage(e, s) {
+        var img = new Image();
+        img.src = $(this).attr("src")
+        var w = img.width;
+        var h = img.height;
+        var wRatio = w / h;
+        if ((220 / wRatio) >= 165) {
+            $(this).width(220); $(this).height(220 / wRatio);
+        } else {
+            $(this).width(165 * wRatio); $(this).height(165);
+        }
+    }
+</script>
+</head>
+
+<body>
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back fr"><i></i><span>返回上一页</span></a>
+  <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
+  <i class="arrow"></i>
+  <span>内容列表</span>
+</div>
+<!--/导航栏-->
+<div class="mainbody">
+<form name="form1" method="post" action="article_list.aspx?channel_id=1" id="form1">
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/WebResource.axd?d=2fwG89sGJPUPiprbbmZ6XQ2&amp;t=635044973992050446" type="text/javascript"></script>
+
+<div>
+
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWagLQt4DYDQKct7iSDALLx9PKBQLM1aXaCwLM1aXaCwLDuo+0BwLBuo+0BwLAuo+0BwLHuo+0BwLGuo+0BwLFuo+0BwLUuo+0BwLbuo+0BwLDus+3BwKIuvaBDAKIuvaBDAK9vMO1DwLb6c6uAwKBu/PjCgKzwtmFBALQh7sSAqPA8JMLAsSEs2gCo6CGuQYC8Zy1ogMCsfWv4gsCsvW/2QkCqeTJlwUClYmhqQgCo6XjnAwClYmhlQsCmYfruQoCxauWkwECsfW73QsCsvWz1AkCqeTV7wMClYm1gQcCo6XX9AoClYmV7QkCjofPjg8Cxauq6w8CsfW33AsCsvW30wkCqeTBzwMClYmZ4QYCo6Xr1AoClYmZzQkCjofz9wYCxauOyw8CsfWj1wsCsvXLzgkCqeStsAIClYnNwAUCo6X/swkClYntrQgCk4eXtg0CxavCqg4CsfWf3gsCsvXP1QkCqeS5mAQClYnRqAcCo6XzmwsClYnxlQoCj4ebnwkCxavGEgKx9avZCwKy9cPQCQKp5MXvAgKViaWBBgKjpef0CQKViaXtCAKMh/+SDgLFq5rrDgKx9afYCwKy9cfPCQKp5LHQAgKVicngBQKjpfvTCQKVienNCAKMh6PVBQLFq77KDgKx9ZPjCwKy9dvaCQKp5J3ABQKVib3QCAKjpY/EDAKVif29CwKZh4fKBALFq7K6AQKx9Y/qCwKy9d/hCQKp5KmoBwKVicG4CgKjpYOsDgKViYGmDQK1h4szAsWrtqIDAtD1s9sLAs/1u9IJAq7tva8DApqSncEGAqiu77QKApqSna0JAvqw8dAOAsSzkqsPAp+W4PAPTHZ3E7vNBDYpIYu6R6xNGVjNkcM=" />
+</div>
+<!--工具栏-->
+<div class="toolbar-wrap">
+  <div id="floatHead" class="toolbar">
+    <div class="l-list">
+      <ul class="icon-list">
+        <li><a class="add" href="article_edit.aspx?action=Add&channel_id=1"><i></i><span>新增</span></a></li>
+        <li><a id="btnSave" class="save" href="javascript:__doPostBack('btnSave','')"><i></i><span>保存</span></a></li>
+        <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
+        <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
+      </ul>
+      <div class="menu-list">
+        <div class="rule-single-select">
+          <select name="ddlCategoryId" onchange="javascript:setTimeout('__doPostBack(\'ddlCategoryId\',\'\')', 0)" id="ddlCategoryId">
+	<option selected="selected" value="">所有类别</option>
+	<option value="1">IT资讯</option>
+	<option value="3">　├ IT业界</option>
+	<option value="4">　├ 软媒动态</option>
+	<option value="5">　├ 科技要闻</option>
+	<option value="6">数码产品</option>
+	<option value="7">　├ 笔记本电脑</option>
+	<option value="8">　├ 平板电脑</option>
+	<option value="9">　├ 智能手机</option>
+	<option value="10">　├ 超极本</option>
+
+</select>
+        </div>
+        <div class="rule-single-select">
+          <select name="ddlProperty" onchange="javascript:setTimeout('__doPostBack(\'ddlProperty\',\'\')', 0)" id="ddlProperty">
+	<option selected="selected" value="">所有属性</option>
+	<option value="isMsg">允许评论</option>
+	<option value="isTop">置顶</option>
+	<option value="isRed">推荐</option>
+	<option value="isHot">热门</option>
+	<option value="isSlide">幻灯片</option>
+
+</select>
+        </div>
+      </div>
+    </div>
+    <div class="r-list">
+      <input name="txtKeywords" type="text" id="txtKeywords" class="keyword" style="width:200px"/>
+      <a id="lbtnSearch" class="btn-search" href="javascript:__doPostBack('lbtnSearch','')">查询</a>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--文字列表-->
+
+<!--/文字列表-->
+
+<!--图片列表-->
+
+<div class="imglist">
+  <ul>
+
+    <li>
+      <div class="details">
+        <div class="check"><span class="checkall"><input id="rptList2_ctl01_chkId" type="checkbox" name="rptList2$ctl01$chkId" /></span><input type="hidden" name="rptList2$ctl01$hidId" id="rptList2_ctl01_hidId" value="62" /></div>
+        <div class="pic"><img src="../skin/default/skin_icons.png" /></div><i class="absbg"></i>
+        <h1><span>需求疲软 4GB DDR3内存纷纷跌破百元大关</span></h1>
+        <div class="foot">
+          <p class="time">1200*500px</p>
+          <a href="article_edit.aspx?action=Edit&channel_id=1&id=62" title="编辑" class="edit">编辑</a>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="details">
+        <div class="check"><span class="checkall"><input id="rptList2_ctl02_chkId" type="checkbox" name="rptList2$ctl02$chkId" /></span><input type="hidden" name="rptList2$ctl02$hidId" id="rptList2_ctl02_hidId" value="77" /></div>
+        <div class="pic"><img src="../skin/default/ad1.jpg" /></div><i class="absbg"></i>
+        <h1><span>历史性时刻：ARM首次成功模拟运行x86</span></h1>
+        <div class="foot">
+          <p class="time">350*200px</p>
+          <a href="article_edit.aspx?action=Edit&channel_id=1&id=77" title="编辑" class="edit">编辑</a>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="details">
+        <div class="check"><span class="checkall"><input id="rptList2_ctl03_chkId" type="checkbox" name="rptList2$ctl03$chkId" /></span><input type="hidden" name="rptList2$ctl03$hidId" id="rptList2_ctl03_hidId" value="76" /></div>
+        <div class="pic"><img src="../skin/default/ad2.jpg" /></div><i class="absbg"></i>
+        <h1><span>超级黑客Comex离开苹果</span></h1>
+        <div class="foot">
+          <p class="time">350*200px</p>
+          <a href="article_edit.aspx?action=Edit&channel_id=1&id=76" title="编辑" class="edit">编辑</a>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="details">
+        <div class="check"><span class="checkall"><input id="rptList2_ctl04_chkId" type="checkbox" name="rptList2$ctl04$chkId" /></span><input type="hidden" name="rptList2$ctl04$hidId" id="rptList2_ctl04_hidId" value="75" /></div>
+        <div class="pic"><img src="../skin/default/loadimg.gif"  /></div><i class="absbg"></i>
+        <h1><span>小蛮腰随心扭，联想Win8变形本Twist宣传视频</span></h1>
+        <div class="foot">
+          <p class="time">350*200px</p>
+          <a href="article_edit.aspx?action=Edit&channel_id=1&id=75" title="编辑" class="edit">编辑</a>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="details">
+        <div class="check"><span class="checkall"><input id="rptList2_ctl05_chkId" type="checkbox" name="rptList2$ctl05$chkId" /></span><input type="hidden" name="rptList2$ctl05$hidId" id="rptList2_ctl05_hidId" value="74" /></div>
+        <div class="pic"><img src="../skin/default/loadimg.gif" /></div><i class="absbg"></i>
+        <h1><span>799元360特供机：“海尔小潜艇”下周限量发售</span></h1>
+        <div class="foot">
+          <p class="time">350*200px</p>
+          <a href="article_edit.aspx?action=Edit&channel_id=1&id=74" title="编辑" class="edit">编辑</a>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="details">
+        <div class="check"><span class="checkall"><input id="rptList2_ctl06_chkId" type="checkbox" name="rptList2$ctl06$chkId" /></span><input type="hidden" name="rptList2$ctl06$hidId" id="rptList2_ctl06_hidId" value="73" /></div>
+        <div class="pic"><img src="../skin/default/loadimg.gif"  /></div><i class="absbg"></i>
+        <h1><span>技术宅拯救世界：用纸糊一辆自行车</span></h1>
+        <div class="foot">
+          <p class="time">350*200px</p>
+          <a href="article_edit.aspx?action=Edit&channel_id=1&id=73" title="编辑" class="edit">编辑</a>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="details">
+        <div class="check"><span class="checkall"><input id="rptList2_ctl07_chkId" type="checkbox" name="rptList2$ctl07$chkId" /></span><input type="hidden" name="rptList2$ctl07$hidId" id="rptList2_ctl07_hidId" value="72" /></div>
+        <div class="pic"><img src="../skin/default/loadimg.gif" /></div><i class="absbg"></i>
+        <h1><span>iPad Mini 23日登场</span></h1>
+        <div class="foot">
+          <p class="time">350*200px</p>
+          <a href="article_edit.aspx?action=Edit&channel_id=1&id=72" title="编辑" class="edit">编辑</a>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="details">
+        <div class="check"><span class="checkall"><input id="rptList2_ctl08_chkId" type="checkbox" name="rptList2$ctl08$chkId" /></span><input type="hidden" name="rptList2$ctl08$hidId" id="rptList2_ctl08_hidId" value="71" /></div>
+        <div class="pic"><img src="../skin/default/loadimg.gif"/></div><i class="absbg"></i>
+        <h1><span>Win8，最后的Windows操作系统</span></h1>
+        <div class="foot">
+          <p class="time">1200*200px</p>
+          <a href="article_edit.aspx?action=Edit&channel_id=1&id=71" title="编辑" class="edit">编辑</a>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="details">
+        <div class="check"><span class="checkall"><input id="rptList2_ctl09_chkId" type="checkbox" name="rptList2$ctl09$chkId" /></span><input type="hidden" name="rptList2$ctl09$hidId" id="rptList2_ctl09_hidId" value="70" /></div>
+        <div class="pic"><img src="../skin/default/loadimg.gif"  /></div><i class="absbg"></i>
+        <h1><span>华为神秘新机Ascend Mate曝光：6.1英寸+四核</span></h1>
+        <div class="foot">
+          <p class="time">1200*200px</p>
+          <a href="article_edit.aspx?action=Edit&channel_id=1&id=70" title="编辑" class="edit">编辑</a>
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="details">
+        <div class="check"><span class="checkall"><input id="rptList2_ctl10_chkId" type="checkbox" name="rptList2$ctl10$chkId" /></span><input type="hidden" name="rptList2$ctl10$hidId" id="rptList2_ctl10_hidId" value="69" /></div>
+        <div class="pic"><img src="../skin/default/loadimg.gif" /></div><i class="absbg"></i>
+        <h1><span>微软宣布Office365大学生版：十个理由让你爱她</span></h1>
+        <div class="foot">
+          <p class="time">1200*200px</p>
+          <a href="article_edit.aspx?action=Edit&channel_id=1&id=69" title="编辑" class="edit">编辑</a>
+        </div>
+      </div>
+    </li>
+
+    
+  </ul>
+</div>
+
+<!--/图片列表-->
+
+<!--内容底部-->
+<div class="line20"></div>
+<div class="pagelist">
+  <div class="l-btns">
+    <span>显示</span><input name="txtPageNum" type="text" value="10" onchange="javascript:setTimeout('__doPostBack(\'txtPageNum\',\'\')', 0)" onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;" id="txtPageNum" class="pagenum" onkeydown="return checkNumber(event);" /><span>条/页</span>
+  </div>
+  <div id="PageContent" class="default"><span>共30记录</span><span class="disabled"><< 上一页</span><span class="current">1</span><a href="article_list.aspx?channel_id=1&page=2">2</a><a href="article_list.aspx?channel_id=1&page=3">3</a><a href="article_list.aspx?channel_id=1&page=2">下一页 >></a></div>
+</div>
+<!--/内容底部-->
+</form>
+</div>
+</body>
+</html>

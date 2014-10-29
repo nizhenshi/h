@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>编辑信息</title>
+<script type="text/javascript" src="../../scripts/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../../scripts/jquery/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" src="../../scripts/lhgdialog/lhgdialog.js?skin=idialog"></script>
+<script type="text/javascript" src="../../scripts/datepicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../../scripts/swfupload/swfupload.js"></script>
+<script type="text/javascript" src="../../scripts/swfupload/swfupload.queue.js"></script>
+<script type="text/javascript" src="../../scripts/swfupload/swfupload.handlers.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../editor/kindeditor-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../editor/lang/zh_CN.js"></script>
+<script type="text/javascript" src="../js/layout.js"></script>
+<link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    $(function () {
+        //初始化表单验证
+        $("#form1").initValidform();
+        //计算用户组价格
+        $("#field_control_sell_price").change(function () {
+            var sprice = $(this).val();
+            if (sprice > 0) {
+                $(".groupprice").each(function () {
+                    var num = $(this).attr("discount") * sprice / 100;
+                    $(this).val(ForDight(num, 2));
+                });
+            }
+        });
+        //初始化编辑器
+        var editor = KindEditor.create('.editor', {
+            width: '98%',
+            height: '350px',
+            resizeType: 1,
+            uploadJson: '../../tools/upload_ajax.ashx?action=EditorFile&IsWater=1',
+            fileManagerJson: '../../tools/upload_ajax.ashx?action=ManagerFile',
+            allowFileManager: true
+        });
+        var editorMini = KindEditor.create('.editor-mini', {
+            width: '98%',
+            height: '250px',
+            resizeType: 1,
+            uploadJson: '../../tools/upload_ajax.ashx?action=EditorFile&IsWater=1',
+            items: [
+				'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+				'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+				'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+        });
+        //初始化上传控件
+        $(".upload-img").each(function () {
+            $(this).InitSWFUpload({ sendurl: "../../tools/upload_ajax.ashx", flashurl: "../../scripts/swfupload/swfupload.swf" });
+        });
+        $(".upload-album").each(function () {
+            $(this).InitSWFUpload({ btntext: "批量上传", btnwidth: 66, single: false, water: true, thumbnail: true, filesize: "2048", sendurl: "../../tools/upload_ajax.ashx", flashurl: "../../scripts/swfupload/swfupload.swf", filetypes: "*.jpg;*.jpge;*.png;*.gif;" });
+        });
+        $(".attach-btn").click(function () {
+            showAttachDialog();
+        });
+        //设置封面图片的样式
+        $(".photo-list ul li .img-box img").each(function () {
+            if ($(this).attr("src") == $("#hidFocusPhoto").val()) {
+                $(this).parent().addClass("selected");
+            }
+        });
+    });
+    //创建附件窗口
+    function showAttachDialog(obj) {
+        var objNum = arguments.length;
+        var attachDialog = $.dialog({
+            id: 'attachDialogId',
+            lock: true,
+            max: false,
+            min: false,
+            title: "上传附件",
+            content: 'url:dialog/dialog_attach.aspx',
+            width: 500,
+            height: 180
+        });
+        //如果是修改状态，将对象传进去
+        if (objNum == 1) {
+            attachDialog.data = obj;
+        }
+    }
+    //删除附件节点
+    function delAttachNode(obj) {
+        $(obj).parent().remove();
+    }
+</script>
+</head>
+<body>
+<!--导航栏-->
+<div class="location">
+  <a href="article_list.aspx?channel_id=1" class="back fr"><i></i><span>返回列表页</span></a>
+  <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
+  <i class="arrow"></i>
+  <a href="article_list.aspx?channel_id=1"><span>内容管理</span></a>
+  <i class="arrow"></i>
+  <span>编辑信息</span>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+<div class="mainbody">
+<form name="form1" method="post" action="article_edit.aspx?action=Edit&amp;channel_id=1&amp;id=62" id="form1">
+<!--内容-->
+<div class="content-tab-wrap">
+  <div id="floatHead" class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a href="javascript:;" onclick="tabs(this);" class="selected">基本信息</a></li>
+        
+        <li><a href="javascript:;" onclick="tabs(this);">详细描述</a></li>
+        <li><a href="javascript:;" onclick="tabs(this);">SEO选项</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>所属类别</dt>
+    <dd>
+      <div class="rule-single-select">
+        <select name="ddlCategoryId" id="ddlCategoryId" datatype="*" sucmsg=" ">
+	<option value="">请选择类别...</option>
+	<option value="1">IT资讯</option>
+	<option selected="selected" value="3">　├ IT业界</option>
+	<option value="4">　├ 软媒动态</option>
+	<option value="5">　├ 科技要闻</option>
+	<option value="6">数码产品</option>
+	<option value="7">　├ 笔记本电脑</option>
+	<option value="8">　├ 平板电脑</option>
+	<option value="9">　├ 智能手机</option>
+	<option value="10">　├ 超极本</option>
+
+</select>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>显示状态</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        <span id="rblStatus"><input id="rblStatus_0" type="radio" name="rblStatus" value="0" checked="checked" /><label for="rblStatus_0">正常</label><input id="rblStatus_1" type="radio" name="rblStatus" value="1" /><label for="rblStatus_1">待审核</label><input id="rblStatus_2" type="radio" name="rblStatus" value="2" /><label for="rblStatus_2">不显示</label></span>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>推荐类型</dt>
+    <dd>
+      <div class="rule-multi-checkbox">
+        <span id="cblItem"><input id="cblItem_0" type="checkbox" name="cblItem$0" /><label for="cblItem_0">允许评论</label><input id="cblItem_1" type="checkbox" name="cblItem$1" /><label for="cblItem_1">置顶</label><input id="cblItem_2" type="checkbox" name="cblItem$2" /><label for="cblItem_2">推荐</label><input id="cblItem_3" type="checkbox" name="cblItem$3" /><label for="cblItem_3">热门</label><input id="cblItem_4" type="checkbox" name="cblItem$4" /><label for="cblItem_4">幻灯片</label></span>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>内容标题</dt>
+    <dd>
+      <input name="txtTitle" type="text" value="需求疲软 4GB DDR3内存纷纷跌破百元大关" id="txtTitle" class="input normal" datatype="*2-100" sucmsg=" " />
+      <span class="Validform_checktip">*标题最多100个字符</span>
+    </dd>
+  </dl>
+  
+  <dl>
+    <dt>封面图片</dt>
+    <dd>
+      <input name="txtImgUrl" type="text" value="/upload/201210/22/201210221025591061.jpg" id="txtImgUrl" class="input normal upload-path" />
+      <div class="upload-box upload-img"></div>
+    </dd>
+  </dl>
+  
+  
+  
+  
+  
+  
+  <dl>
+    <dt>排序数字</dt>
+    <dd>
+      <input name="txtSortId" type="text" value="0" id="txtSortId" class="input small" datatype="n" sucmsg=" " />
+      <span class="Validform_checktip">*数字，越小越向前</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>浏览次数</dt>
+    <dd>
+      <input name="txtClick" type="text" value="540" id="txtClick" class="input small" datatype="n" sucmsg=" " />
+      <span class="Validform_checktip">点击浏览该信息自动+1</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>发布时间</dt>
+    <dd>
+      <div class="input-date">
+        <input name="txtAddTime" type="text" value="2012-10-20 12:54:21" id="txtAddTime" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}\s{1}(\d{1,2}:){2}\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" " />
+        <i>日期</i>
+      </div>
+      <span class="Validform_checktip">不选择默认当前发布时间</span>
+    </dd>
+  </dl>
+  
+  
+</div>
+
+
+
+<div class="tab-content" style="display:none">
+  <dl>
+    <dt>调用别名</dt>
+    <dd>
+      <input name="txtCallIndex" type="text" id="txtCallIndex" class="input normal" datatype="/^\s*$|^[a-zA-Z0-9\-\_]{2,50}$/" sucmsg=" " />
+      <span class="Validform_checktip">*别名访问，非必填，不可重复</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>URL链接</dt>
+    <dd>
+      <input name="txtLinkUrl" type="text" maxlength="255" id="txtLinkUrl" class="input normal" />
+      <span class="Validform_checktip">填写后直接跳转到该网址</span>
+    </dd>
+  </dl>
+  <dl id="div_source">
+    <dt><span id="div_source_title">信息来源</span></dt>
+    <dd>
+      <input name="field_control_source" type="text" value="本站" id="field_control_source" class="input normal" />
+      <span id="div_source_tip" class="Validform_checktip">非必填，最多50个字符</span>
+    </dd>
+  </dl>
+  <dl id="div_author">
+    <dt><span id="div_author_title">文章作者</span></dt>
+    <dd>
+      <input name="field_control_author" type="text" value="管理员" id="field_control_author" class="input normal" datatype="s0-50" sucmsg=" " />
+      <span id="div_author_tip" class="Validform_checktip">非必填，最多50个字符</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>内容摘要</dt>
+    <dd>
+      <textarea name="txtZhaiyao" rows="2" cols="20" id="txtZhaiyao" class="input" datatype="*0-255" sucmsg=" ">TrendForce旗下内存调研机构DRAMeXchange的最新数据显示，今年PC整机的出货量高峰已经过去，十月份的笔记本出货量逐步下滑，DRAM内存需求和价格也持续走低，4GB DDR3内存条平均价格下滑了1.54％，仅为16美元，最低的更是只要15.75美元，换成2Gb内存颗粒仅仅只有0.83美元，…</textarea>
+      <span class="Validform_checktip">不填写则自动截取内容前255字符</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>内容描述</dt>
+    <dd>
+      <textarea name="txtContent" id="txtContent" class="editor" style="visibility:hidden;">&lt;p&gt;
+	&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;TrendForce旗下内存调研机构DRAMeXchange的最新数据显示，今年PC整机的出货量高峰已经过去，十月份的笔记本出货量逐步下滑，DRAM内存需求和价格也持续走低，&lt;strong&gt;4GB 
+DDR3内存条平均价格下滑了1.54％，仅为16美元，最低的更是只要15.75美元&lt;/strong&gt;，换成2Gb内存颗粒仅仅只有0.83美元，几乎与现货颗粒价格完全相同。
+&lt;/p&gt;
+&lt;p&gt;
+	&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;2GB DDR3内存条合约价仍与九月下旬相同，平均9.25美元，已经基本没有了继续下跌的空间。
+&lt;/p&gt;
+&lt;p&gt;
+	&lt;strong&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;而在国内市场上，4GB DDR3内存条也已经出现了大把大把的99元超低价，2GB的更是一片69元。&lt;/strong&gt; 
+&lt;/p&gt;
+&lt;p&gt;
+	&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;受宏观经济形势影响，各家厂商的DRAM内存颗粒价格已经逼近甚至低于成本价，而市场需求迟迟未见起色，目前仍处于供过于求的局面。
+&lt;/p&gt;
+&lt;p&gt;
+	&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;展望2013年，即便是身为老大的三星电子也是异常谨慎，除了放缓28nm工艺进度，在极紫外光刻到来之前也只准备再升级一次25nm，并且优先将新工艺导入移动内存生产线，重心也已偏离PC 
+DRAM。
+&lt;/p&gt;
+&lt;p&gt;
+	&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;从2009年的60nm到2012年的30nm，DRAM内存的生产工艺几乎以每年1-1.5代的高速度前进，但是经济形势不佳、PC行业低迷、移动设备冲击之下，PC更新换代周期正在从2-3年拉长到4-5年，再加上技术难度增加，DRAM内存的工艺进步也失去了动力，目前仍是主打30nm，&lt;strong&gt;20nm预计要到明年下半年才会成为主流&lt;/strong&gt;。
+&lt;/p&gt;
+&lt;p&gt;
+	&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;DRAMeXchange还预计，2013年全球DRAM内存颗粒的出货总容量只会增长22.2％，创下历年来新低。
+&lt;/p&gt;</textarea>
+    </dd>
+  </dl>
+</div>
+
+<div class="tab-content" style="display:none">
+  <dl>
+    <dt>SEO标题</dt>
+    <dd>
+      <input name="txtSeoTitle" type="text" maxlength="255" id="txtSeoTitle" class="input normal" datatype="*0-100" sucmsg=" " />
+      <span class="Validform_checktip">255个字符以内</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>SEO关健字</dt>
+    <dd>
+      <textarea name="txtSeoKeywords" rows="2" cols="20" id="txtSeoKeywords" class="input" datatype="*0-255" sucmsg=" "></textarea>
+      <span class="Validform_checktip">以“,”逗号区分开，255个字符以内</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>SEO描述</dt>
+    <dd>
+      <textarea name="txtSeoDescription" rows="2" cols="20" id="txtSeoDescription" class="input" datatype="*0-255" sucmsg=" "></textarea>
+      <span class="Validform_checktip">255个字符以内</span>
+    </dd>
+  </dl>
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-list">
+    <input type="submit" name="btnSubmit" value="提交保存" id="btnSubmit" class="btn" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+  </div>
+  <div class="clear"></div>
+</div>
+<!--/工具栏-->
+</form>
+</div>
+</body>
+</html>

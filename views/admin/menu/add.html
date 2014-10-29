@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>编辑信息</title>
+<script type="text/javascript" src="/static/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/static/js/layout.js"></script>
+<script type="text/javascript" src="/static/js/lhgdialog/lhgdialog.min.js?skin=idialog"></script>
+<script type="text/javascript" src="/static/js/validform/Validform_v5.3.2_min.js"></script>  
+<!--ZTREE-->
+<link href="/static/js/zTree/css/demo.css" rel="stylesheet" />
+<link href="/static/js/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+<script type="text/javascript" src="/static/js/zTree/js/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="/static/js/zTree/js/jquery.ztree.excheck-3.5.js"></script>
+<link href="/static/css/default/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    $(function () {
+        //初始化表单验证
+        $("#form1").initValidform();
+    });
+</script>
+</head>
+<body>
+<!--导航栏-->
+<div class="location">
+  <a href="/admin/menu/list" class="back fr"><i></i><span>返回列表页</span></a>
+  <a href="/admin/center" class="home"><i></i><span>首页</span></a>
+  <i class="arrow"></i>
+  <a><span>内容管理</span></a>
+  <i class="arrow"></i>
+  <span>编辑信息</span>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+<div class="mainbody">
+<form id="form1" method="post" action="/admin/menu/add" class="form-horizontal">
+    {{$list:=.list}}
+    {{$rolelist:=.rolelist}}
+    {{$parentId:=.parentId}}
+    {{with .model}}
+    <input type="hidden" name="id" value="{{.Id}}"/>
+<!--内容-->
+<div class="content-tab-wrap">
+  <div id="floatHead" class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a href="javascript:;" class="selected">基本信息</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>所属类别</dt>
+    <dd>
+      <input type="hidden" id="txtParentId" name="parentid" value="{{$parentId}}">
+      <input type="text" class="input" style="width:200px;" id="citySel" value="{{Tb_Menu_GetParentName $parentId}}" 
+        onclick="showMenu(); return false;" datatype="*" sucmsg=" "/>
+      <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+      <ul id="treeDemo" class="ztree" style="margin-top:0; width:210px;"></ul>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>显示状态</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        <span id="rblStatus">
+        <input type="radio" name="viewFlag" value="0" 
+           {{if Tb_Manager_Status_List .ViewFlag 0}} checked="checked" {{end}}/>
+        <label for="rblStatus_0">正常</label>
+        <input type="radio" name="viewFlag" value="1" 
+           {{if Tb_Manager_Status_List .ViewFlag 1}} checked="checked" {{end}}/>
+        <label for="rblStatus_1">不显示</label>
+        </span>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>菜单名称</dt>
+    <dd>
+      <input type="text" name="title" value="{{.Title}}" id="txtTitle" class="input normal" datatype="*2-100" sucmsg=" " />
+      <span class="Validform_checktip">*标题最多100个字符</span>
+    </dd>
+  </dl>
+  
+  <dl>
+    <dt>调用名称</dt>
+    <dd>
+     <input type="text" name="name" value="{{.Name}}" id="txtName" class="input normal" datatype="*2-100" sucmsg=" " />
+      <span class="Validform_checktip">*名称最多100个字符</span>
+   </dd>
+  </dl>
+
+  <dl>
+    <dt>链接地址</dt>
+    <dd>
+     <input type="text"   name="linkurl" value="{{.LinkUrl}}"
+         id="txtLinkUrl" class="input normal" datatype="*2-100" sucmsg=" " />
+      <span class="Validform_checktip">*请输入链接地址</span>
+   </dd>
+  </dl>
+
+  <dl>
+    <dt>链接目标</dt>
+    <dd>
+     <input type="text" name="target" value="{{.Target}}"
+         id="txtTarget" class="input normal" datatype="*2-100" sucmsg=" " />
+      <span class="Validform_checktip">*请输入链接目标</span>
+   </dd>
+  </dl>
+
+
+  <dl>
+    <dt>排序数字</dt>
+    <dd>
+      <input type="text" name="ordertop" value="{{.OrderTop}}"
+         id="txtSortId" class="input small" datatype="n" sucmsg=" " />
+      <span class="Validform_checktip">*数字，越小越向前</span>
+    </dd>
+  </dl>
+
+    <dl>
+    <dt>权限资源</dt>
+    <dd>
+  <div class="rule-multi-porp">
+   {{$varAction:=.Action}}
+   {{range $k,$v :=$rolelist}}
+     <input id="cblActionType_{{$k}}" type="checkbox"  checked="checked"  name="cblActionType_{{$k}}" />
+     <label for="cblActionType_{{$k}}">{{$v}} ({{$k}})</label>           
+    {{end}}
+  </div>
+          </dd>
+  </dl>
+
+</div>
+<!--/内容-->
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-list">
+    <input type="submit" name="btnSubmit" value="提交保存" id="btnSubmit" class="btn" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+  </div>
+  <div class="clear"></div>
+</div>
+{{end}}
+</form>
+{{str2html .msg}}
+
+<!--/工具栏-->
+<Script>
+  <!--
+    var setting = {
+      check: {
+        enable: true,
+        chkStyle: "radio",
+        radioType: "all"
+      },
+      view: {
+        dblClickExpand: false
+      },
+      data: {
+        simpleData: {
+          enable: true
+        }
+      },
+      callback: {
+        onClick: onClick,
+        onCheck: onCheck
+      }
+    };
+  var list =eval('([' + {{Tb_Menu_GetAddNav_List 0}} + '])')
+    var zNodes =list;
+
+    function onClick(e, treeId, treeNode) {
+      var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+      zTree.checkNode(treeNode, !treeNode.checked, null, true);
+       $("#txtParentId").attr("value",treeNode.id);
+           
+      return false;
+    }
+
+    function onCheck(e, treeId, treeNode) {
+       var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+            nodes = zTree.getCheckedNodes(true),
+            v = "";
+            id="";
+            var  strId="";
+            for (var i=0, l=nodes.length; i<l; i++) {
+                v += nodes[i].name + ",";
+                id+=nodes[i].id+",";
+            }
+            if (v.length > 0 ) v = v.substring(0, v.length-1);
+            if(id.length>0) id=id.substring(0,id.length-1);
+            var cityObj = $("#citySel");
+            cityObj.attr("value", v);
+            $("#txtParentId").attr("value",id);
+         }
+
+    function showMenu() {
+      var cityObj = $("#citySel");
+      var cityOffset = $("#citySel").offset()-21;
+      $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+      $("body").bind("mousedown", onBodyDown);
+    }
+    function hideMenu() {
+      $("#menuContent").fadeOut("fast");
+      $("body").unbind("mousedown", onBodyDown);
+    }
+    function onBodyDown(event) {
+      if (!(event.target.id == "menuBtn" || event.target.id == "citySel" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+        hideMenu();
+      }
+    }
+
+    $(document).ready(function(){
+      $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+    //-->
+</Script>
+
+</form>
+</div>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>后台管理中心</title>
+<link href="/static/css/default/style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+  body{ background:#2E363F}
+</style>
+<script type="text/javascript" src="/static/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery/jquery.nicescroll.js"></script>
+<script>
+$(function() {
+    loadMenuTree(true)
+});
+$(window).resize(function() {
+    navresize()
+});
+function loadMenuTree(a) {
+    var b = false;
+    if (arguments.length == 1 && a) {
+        b = true
+    }
+    c="{{Tb_Menu_Select_System_Menu .Ctx}}";
+            $("#sidebar-nav .list-box").html(c);
+            $("#pop-menu .list-box").html(c);
+            initMenuTree(b);
+            initPopMenuTree();
+            $("#sidebar-nav").niceScroll({
+                touchbehavior: false,
+                cursorcolor: "#7C7C7C",
+                cursoropacitymax: 0.6,
+                cursorwidth: 5
+            });
+            $("#pop-menu .list-box").niceScroll({
+                touchbehavior: false,
+                cursorcolor: "#7C7C7C",
+                cursoropacitymax: 0.6,
+                cursorwidth: 5
+            });
+            $("#pop-menu .list-box").getNiceScroll().hide();
+            navresize()
+}
+function initMenuTree(a) {
+    $("#nav").html("");
+    $("#sidebar-nav .list-box .list-group").each(function(c) {
+        var b = $('<li><i class="icon-' + c + '"></i><span>' + $(this).attr("name") + "</span></li>").appendTo($("#nav"));
+        if (c == 0) {
+            $(this).show();
+            b.addClass("selected")
+        }
+        b.click(function() {
+            $("#nav li").removeClass("selected");
+            $(this).addClass("selected");
+            $("#sidebar-nav .list-box .list-group").hide();
+            $("#sidebar-nav .list-box .list-group").eq($("#nav li").index($(this))).show()
+        });
+        $(this).children("h2").click(function() {
+            if ($(this).next("ul").css("display") != "none") {
+                return false
+            }
+            $(this).siblings("ul").slideUp(300);
+            $(this).next("ul").slideDown(300);
+            if ($(this).next("ul").children("li").first().children("ul").length > 0) {}
+        });
+        $(this).find("ul").hide();
+        $(this).find("ul").each(function(d) {
+            $(this).children("li").each(function() {
+                liObj = $(this);
+                var h = liObj.children("a").children("span");
+                $('<div class="arrow"></div>').insertBefore(h);
+                var f = liObj.parent().parent().children("a").children(".expandable").length;
+                if (liObj.children("ul").length > 0) {
+                    liObj.children("a").removeAttr("href");
+                    liObj.children("a").addClass("pack");
+                    var e;
+                    for (var g = 0; g <= f; g++) {
+                        e = $('<div class="expandable"></div>').insertBefore(h)
+                    }
+                    e.addClass("close");
+                    $('<div class="folder close"></div>').insertBefore(h);
+                    liObj.children("ul").hide();
+                    liObj.children("a").click(function() {
+                        $(this).parent().siblings().each(function() {
+                            if ($(this).children("ul").length > 0) {
+                                $(this).children("a").children(".expandable").last().removeClass("open");
+                                $(this).children("a").children(".expandable").last().addClass("close");
+                                $(this).children("ul").slideUp(300)
+                            }
+                        });
+                        $(this).children(".expandable").last().removeClass("close");
+                        $(this).children(".expandable").last().addClass("open");
+                        $(this).parent().children("ul").slideDown(300)
+                    })
+                } else {
+                    for (var g = 0; g < f; g++) {
+                        $('<div class="expandable"></div>').insertBefore(h)
+                    }
+                    $('<div class="folder open"></div>').insertBefore(h);
+                    liObj.children("a").click(function() {
+                        $("#sidebar-nav .list-box .list-group ul li a").removeClass("selected");
+                        $(this).addClass("selected");
+                        addCookie("dt_manage_navigation_cookie", $(this).attr("navid"), 240)
+                    })
+                }
+            });
+            if (d == 0) {
+                $(this).show();
+                if ($(this).children("li").first().children("ul").length > 0) {
+                    $(this).children("li").first().children("a").children(".expandable").last().removeClass("close");
+                    $(this).children("li").first().children("a").children(".expandable").last().addClass("open");
+                    $(this).children("li").first().children("ul").show()
+                }
+            }
+        })
+    });
+    linkMenuTree(a)
+}
+function linkMenuTree(e, d) {
+    var b;
+    var c = arguments.length;
+    if (c == 2) {
+        b = $("#sidebar-nav").find('a[navid="' + d + '"]')
+    } else {
+        b = $("#sidebar-nav").find('a[navid="' + getCookie("dt_manage_navigation_cookie") + '"]')
+    }
+    if (b.length > 0) {
+        var a = $("#sidebar-nav .list-box .list-group").index(b.parents(".list-group"));
+        $("#nav li").removeClass("selected");
+        $("#nav li").eq(a).addClass("selected");
+        b.parents(".list-group").siblings().hide();
+        b.parents(".list-group").show();
+        b.parents("li").each(function() {
+            $(this).siblings().each(function() {
+                if ($(this).children("ul").length > 0) {
+                    $(this).children("a").children(".expandable").last().removeClass("open");
+				
+                    $(this).children("a").children(".expandable").last().addClass("close");
+                    $(this).children("ul").hide()
+                }
+            });
+            if ($(this).children("ul").length > 0) {
+                $(this).children("a").children(".expandable").last().removeClass("close");
+				
+                $(this).children("a").children(".expandable").last().addClass("open")
+            }
+            $(this).children("ul").show()
+        });
+        b.parents("ul").eq( - 1).show();
+        b.parents("ul").eq( - 1).siblings("ul").hide();
+        $("#sidebar-nav .list-box .list-group ul li a").removeClass("selected");
+        b.addClass("selected");
+        if (c == 2) {
+            addCookie("dt_manage_navigation_cookie", d, 240)
+        }
+        if (e == true) {
+            frames["mainframe"].location.href = b.attr("href")
+        }
+    } else {
+        if (c == 2) {
+            $("#sidebar-nav .list-box .list-group ul li a").removeClass("selected");
+            addCookie("dt_manage_navigation_cookie", "", 240)
+        }
+    }
+}
+function initPopMenuTree() {
+    var a = $("#pop-menu .list-box .list-group").length * $("#pop-menu .list-box .list-group").outerWidth();
+    var b = $(window).height() * 0.6;
+    if (a > ($(window).width() - 60)) {
+        a = $(window).width() - 60
+    }
+    var c = 0;
+    $("#pop-menu .list-box .list-group").each(function() {
+        if ($(this).height() > c) {
+            c = $(this).height()
+        }
+    });
+    if (b > c) {
+        b = c
+    }
+    $("#pop-menu .list-box .list-group").height(c);
+    $("#pop-menu .pop-box").width(a);
+    $("#pop-menu .pop-box").height(b);
+    $("#pop-menu .pop-box .list-box li").each(function() {
+        var d = $(this).children("a");
+        d.removeAttr("href");
+        if ($(this).children("ul").length > 0) {
+            d.addClass("nolink")
+        } else {
+            d.addClass("link");
+            d.click(function() {
+                linkMenuTree(true, d.attr("navid"))
+            })
+        }
+    })
+}
+function triggerMenu(a) {
+    if (a) {
+        $("#pop-menu .list-box").getNiceScroll().show();
+        $("#pop-menu").css("visibility", "visible")
+    } else {
+        $("#pop-menu .list-box").getNiceScroll().hide();
+        $("#pop-menu").css("visibility", "hidden")
+    }
+}
+function navresize() {
+    var a = $(document).width();
+    if (a < 1004) {
+        $(".nav li span").hide()
+    } else {
+        $(".nav li span").show()
+    }
+};
+</script>
+</head>
+<body class="indexbody" style="">
+  <div class="header">
+    <div class="header-box">
+      <h1 class="logo"></h1>
+      <ul id="nav" class="nav">
+         </ul>
+        <div class="nav-right">
+        <div class="icon-info"> 
+        {{if .IsLogin}}
+        <span> 您好，{{.uname}}
+            <a id="lbtnExit" href="/admin/loginout">注销登录</a></span> 
+        {{else}}
+        <span>
+            <a id="lbtnExit" href="/admin">请登录</a></span> 
+        {{end}}
+        </div>
+      </div>  
+    </div>
+  </div>
+  <div class="main-sidebar">
+    <div id="sidebar-nav" class="sidebar-nav" style="overflow: hidden; outline: none; " tabindex="5000">
+      <div class="list-box">
+      </div>
+    </div>
+  </div>
+  <div class="main-container">
+    <iframe id="mainframe" name="mainframe" frameborder="0" src="/admin/center"></iframe>
+  </div>
+  
+  </body>
+</html>

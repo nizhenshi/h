@@ -1,0 +1,35 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="css/base.css"/>
+<link rel="stylesheet" type="text/css" href="css/member.css">
+<title>天云煤业</title>
+</head>
+<body>
+  <DIV class="login">
+    	<div class="loginBg">
+		    	<div class="loginBox mb20 w300">
+		    		<form method="post" action="{$DT[file_login]}"  onsubmit="return Dcheck();">
+			        	<div class="title">会员注册 <span class="important" style="font-size: 13px; margin-left: 10px;"></span><span class="notice" style="font-size: 13px;"></span></div>
+			            <div class="mb10">
+			            	<input name="username" class="text" id="username" value="{$username}" />&nbsp;&nbsp;<span>用户名</span> <!-- 默认保存 账号cookie，记录上次登录的账号-->
+			            </div>
+			            <div class="mb10">
+			            	<input name="password" class="text" id="password" value="" />&nbsp;&nbsp;<span>密　码</span>
+			            </div>
+                        <div class="mb10">
+                        	<input name="chip" class="text" id="chip" value="" />
+                        	&nbsp;<span>确认密码</span>
+                        </div>
+                        <div class="mb10">
+                        	<input name="chip" class="text" id="chip" value="" />
+                        	&nbsp;<span>验证码</span>
+                        </div>
+			            <div class="mb10" style="margin-left: -12px;"><span class="loginBtn"><input type="submit"  name="submit" value="免费注册" /></span>&nbsp;&nbsp;&nbsp;<a  style=" line-height:30px" href="{$MODULE[2][linkurl]}{$DT[file_register]}">已有账号，登陆</a></div>
+		        	</form>
+		        </div>
+		    </div>
+  </DIV>
+</BODY>
+</HTML>

@@ -1,0 +1,375 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>添加信息</title>
+  <link href="/static/dtcms2/admin/skin/default/style.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="/static/js/zTree/css/demo.css" type="text/css">
+  <link rel="stylesheet" href="/static/js/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+  <script type="text/javascript" src="/static/dtcms2/scripts/jquery/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="/static/js/Validform/Validform_v5.3.2_min.js"></script>
+  <script type="text/javascript" src="/static/js/lhgdialog/lhgdialog.js?skin=idialog"></script>
+  <script type="text/javascript" src="/static/js/datepicker/WdatePicker.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/scripts/swfupload/swfupload.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/scripts/swfupload/swfupload.queue.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/scripts/swfupload/swfupload.handlers.js"></script>
+  <script type="text/javascript" src="/static/dtcms2/admin/js/layout.js"></script>
+  <script type="text/javascript" src="/static/js/zTree/js/jquery.ztree.core-3.5.js"></script>
+  <script type="text/javascript">
+    $(function () {
+        //初始化表单验证
+        $("#form1").initValidform();
+        //初始化上传控件
+        $(".upload-img").each(function () {
+             $(this).InitSWFUpload({ sendurl: "/web/ue/swfupload", flashurl: "/static/dtcms2/scripts/swfupload/swfupload.swf" });
+        });
+    });
+</script>
+</head>
+<body>
+  <!--导航栏-->
+  <div class="location">
+    <a href="/admin/article/list" class="back fr"> <i></i>
+      <span>返回列表页</span>
+    </a>
+    <a href="/admin/center" class="home"> <i></i>
+      <span>首页</span>
+    </a>
+    <i class="arrow"></i>
+    <a href="/admin/article/list">
+      <span>资讯管理</span>
+    </a>
+    <i class="arrow"></i>
+    <span>更新信息</span>
+  </div>
+  <div class="line10"></div>
+  <!--/导航栏-->
+  <div class="mainbody">
+    <form name="form1" method="post" action="/admin/article/update" id="form1">
+    {{$curStatus := .Status}}
+    {{$cat_name := .CatName}}
+    {{$levelarr := .LevelArr}}
+    {{$checkedLevel := .CheckedLevel}}
+    {{$statusarr := .StatusArr}}
+    {{$html_fields := .HtmlFields}}
+    {{with .Article}}
+    <input type="hidden" name="Id" value="{{.Id}}">
+    <input type="hidden" name="Typeid" value="{{.Typeid}}">
+    <input type="hidden" name="Userid" value="{{.Userid}}">
+
+      <div class="content-tab-wrap">
+        <div id="floatHead" class="content-tab">
+          <div class="content-tab-ul-wrap">
+            <ul>
+              <li>
+                <a href="javascript:;" onclick="tabs(this);" class="selected">基本信息</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="tabs(this);">详细描述</a>
+              </li>
+              <li>
+                <a href="javascript:;" id="extendAttr" onclick="tabs(this);">扩展属性</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="tabs(this);">SEO选项</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content">
+        <dl>
+          <dt>所属类别</dt>
+          <dd>
+            <input type="hidden" id="CategoryId" name="Catid" value="{{.Catid}}" />
+            <input type="text" value="{{$cat_name}}" readonly onclick="showMenu(); return false;" class="input normal" id="ParentTitle" datatype="*1-100" sucmsg="" />
+            <span class="Validform_checktip">*选择父菜单</span>
+          </dd>
+        </dl>
+        
+        <dl>
+          <dt>标题</dt>
+          <dd>
+            <input name="Title" value="{{.Title}}" type="text" class="input normal" datatype="*2-100" sucmsg=" " />
+            <span class="Validform_checktip">*标题最多100个字符</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>标题图</dt>
+          <dd>
+            <input name="Thumb"  value="{{.Thumb}}" type="text" id="txtImgUrl" class="input normal upload-path" />
+            <div class="upload-box upload-img"></div>
+          </dd>
+        </dl>
+
+        <dl>
+          <dt>级别</dt>
+          <dd>
+            <div class="rule-multi-checkbox">
+              <span id="cblItem">
+                  {{$level := .Level}}
+                  {{range $k, $v := $levelarr}}
+                    <input type="checkbox" name="Level" class="level_cb"
+                    {{range $kk, $vv := $checkedLevel}}
+                        {{if eq $vv $v.Value}}checked="checked"{{end}}
+                    {{end}}
+                     value="{{$v.Value}}" />
+                    <label>{{$v.Key}}</label>
+                  {{end}}
+              </span>
+            </div>
+          </dd>
+        </dl>
+        <dl>
+          <dt>是否允许评论</dt>
+          <dd>
+            <div class="rule-multi-radio">
+              <span id="rblIsComment">
+                <input  type="radio" name="IsComment" value="1" {{if eq .IsComment 1}}checked="checked"{{end}} />
+                <label>是</label>
+                <input  type="radio" name="IsComment" value="0" {{if eq .IsComment 0}}checked="checked"{{end}} />
+                <label>否</label>
+              </span>
+            </div>
+          </dd>
+        </dl>
+       
+        <dl>
+          <dt>状态</dt>
+          <dd>
+            <div class="rule-multi-radio">
+              <span id="rblStatus">
+              {{range $k, $v := $statusarr}}
+                <input type="radio" name="Status" class="artLevel" value="{{$v.Value}}" {{if eq $curStatus $v.Value}}checked="checked"{{end}} />
+                <label>{{$v.Key}}</label>
+              {{end}}
+              </span>
+            </div>
+          </dd>
+        </dl>
+        <dl>
+          <dt>作者</dt>
+          <dd>
+            <input name="Author" value="{{.Author}}" type="text" class="input small" sucmsg=" " />
+            <span class="Validform_checktip"></span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>来源</dt>
+          <dd>
+            <input name="CopyFrom" value="{{.CopyFrom}}" type="text" class="input normal" sucmsg=" " />
+            <span class="Validform_checktip"></span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>浏览次数</dt>
+          <dd>
+            <input name="Hits" value="{{.Hits}}" type="text" id="txtClick" class="input small" datatype="n" sucmsg=" " />
+            <span class="Validform_checktip">前台浏览该信息自动+1</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>发布时间</dt>
+        <dd>
+          <div class="input-date">
+            <input name="AddTime" type="text" value='{{date .AddTime "Y-m-d H:i:s"}}' class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}\s{1}(\d{1,2}:){2}\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" " />
+            <i>日期</i>
+          </div>
+          <span class="Validform_checktip">不选择默认当前发布时间</span>
+        </dd>
+        </dl>
+
+      </div>
+
+      <div class="tab-content" style="display:none">
+        <dl>
+          <dt>内容摘要</dt>
+          <dd>
+            <textarea rows="2" style="width:600px" cols="20" name="Introduce" id="txtZhaiyao" class="input" datatype="*0-255" sucmsg="">{{.Introduce}}</textarea>
+            <span class="Validform_checktip"></span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>内容描述</dt>
+          <dd>
+            <script type="text/javascript" src="/static/js/ueditor/ueditor.config.js"></script>
+            <script type="text/javascript" src="/static/js/ueditor/ueditor.all.min.js"></script>
+            <script type="text/plain"  id="Describe" name="Content"></script>
+            <script type="text/javascript">
+                    var options = {"fileUrl":"/web/ue/upload","imageUrl":"/web/ue/upload","filePath":"","imagePath":"","initialFrameWidth":"90%","initialFrameHeight":"400","initialContent":"{{.Content}}"};
+                    var ue = UE.getEditor("Describe", options);
+                </script>
+          </dd>
+        </dl>
+      </div>
+      <div class="tab-content" id="fieldsTab" style="display:none">
+           <!--扩展属性-->
+           
+      </div>
+      <div class="tab-content" style="display:none">
+        <dl>
+          <dt>SEO标题</dt>
+          <dd>
+            <input name="SeoTitle" value="{{.SeoTitle}}" type="text" maxlength="255" value="" class="input normal" datatype="*0-100" sucmsg=" " />
+            <span class="Validform_checktip">100个字符以内</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>SEO关健字</dt>
+          <dd>
+            <textarea name="SeoKeyword" rows="2" cols="20"  class="input" datatype="*0-255" sucmsg=" ">{{.SeoKeyword}}</textarea>
+            <span class="Validform_checktip">以“,”逗号区分开，255个字符以内</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>SEO描述</dt>
+          <dd>
+            <textarea name="SeoDescribe" rows="2" style="width:600px" cols="20" class="input" datatype="*0-255" sucmsg=" ">{{.SeoDescribe}}</textarea>
+            <span class="Validform_checktip">255个字符以内</span>
+          </dd>
+        </dl>
+      </div>
+      <!--/内容-->
+
+      <!--工具栏-->
+      <div class="page-footer">
+        <div class="btn-list">
+          <input type="submit" name="btnSubmit" value="提交保存" id="btnSubmit" class="btn" />
+          <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+        </div>
+        <div class="clear"></div>
+      </div>
+      <!--/工具栏--> 
+    {{end}}
+    </form>
+  </div>
+  <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+    <ul id="treeDemo" class="ztree" style="margin-top:0; width:200px;"></ul>
+  </div>
+  <script type="text/javascript">
+    var setting = {
+      view: {
+        dblClickExpand: false,
+        showIcon: false
+      },
+      data: {
+        simpleData: {
+          enable: true
+        }
+      },
+      callback: {
+        beforeClick: beforeClick,
+        onClick: onClick
+      }
+    };
+    var zNodes =  eval('(' + {{.List}} + ')');
+    function beforeClick(treeId, treeNode) {
+    }
+    function onClick(e, treeId, treeNode) {
+      var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+      nodes = zTree.getSelectedNodes(),
+      v = "";
+      nodes.sort(function compare(a,b){return a.id-b.id;});
+      for (var i=0, l=nodes.length; i<l; i++) {
+        v += nodes[i].name + ",";
+      }
+      if (v.length > 0 ) v = v.substring(0, v.length-1);
+      var cityObj = $("#ParentTitle");
+      cityObj.attr("value", v);
+      $("#CategoryId").val(treeNode.id);
+
+      <!--加载扩展属性开始-->
+          $.post("/admin/article/jsonfields", {"catid":treeNode.id, "fid":0}, function(data){
+            $("#fieldsTab").html(data);
+            addChecked();
+          })
+      <!--加载扩展属性结束-->
+    }
+    function showMenu() {
+      var cityObj = $("#ParentTitle");
+      var cityOffset = $("#ParentTitle").offset();
+      $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+      $("body").bind("mousedown", onBodyDown);
+    }
+    function hideMenu() {
+      $("#menuContent").fadeOut("fast");
+      $("body").unbind("mousedown", onBodyDown);
+    }
+    function onBodyDown(event) {
+      if (!(event.target.id == "ParentTitle" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+        hideMenu();
+      }
+    }
+    $(document).ready(function(){
+      $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+  </script>
+  <script type="text/javascript">
+  $(function(){
+
+    <!--加载扩展属性开始-->
+      $("#extendAttr").click(function(){
+          catid = $("input[name='Catid']").val();
+          itemid = $("input[name='Id']").val();
+          $.post("/admin/article/jsonfields", {"catid":catid, "fid":itemid}, function(data){
+            $("#fieldsTab").html(data);
+            addChecked();
+          })
+
+          
+      })
+      <!--加载扩展属性结束-->  
+  })
+
+   function addChecked(){
+      $(".extendDiv").delegate(".extendAitem","click",function(){
+        isChecked = false;
+        // 判断类型 
+        connType = $(this).attr("connType")
+
+        if (connType == "checkbox") {
+          if ($(this).hasClass("selected")) {
+            $(this).removeClass("selected");
+          }else {
+            isChecked = true
+            $(this).addClass("selected");
+          }
+
+          curIndex = $(this).index();
+          connName = $(this).attr("connName");
+
+          $("."+connName).each(function(){
+            if ($(this).index()/2 == curIndex) {
+              $(this).attr("checked", isChecked)
+            }
+          })
+        }else {
+          $(this).siblings().each(function(){
+             $(this).removeClass("selected");
+          })
+
+          $(this).addClass("selected");
+
+          curIndex = $(this).index();
+          connName = $(this).attr("connName");
+
+         
+          $("."+connName).each(function(){
+            if ($(this).index()/2 == curIndex) {
+              $(this).attr("checked", true)
+            }else {
+              $(this).attr("checked", false)
+            }
+          })
+        }
+        
+
+      })
+    }
+   
+  </script>
+
+  {{.alert}}
+</body>
+</html>

@@ -1,0 +1,596 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>后台管理中心</title>
+<link href="skin/default/style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+	body{ background:#2E363F}
+</style>
+<script type="text/javascript" src="../scripts/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../scripts/jquery/jquery.nicescroll.js"></script>
+<script>
+$(function() {
+    loadMenuTree(true)
+});
+$(window).resize(function() {
+    navresize()
+});
+function loadMenuTree(a) {
+    var b = false;
+    if (arguments.length == 1 && a) {
+        b = true
+    }
+c="<div class='list-group' name='内容'><ul><li> <a navid='channel_news' class='item'> <span>新闻资讯</span> </a><ul><li> <a navid='channel_news_list' href='article/article_list.html' target='mainframe' class='item selected'> <span>内容管理</span> </a> </li><li> <a navid='channel_news_category' href='article/article_list_1.html' target='mainframe' class='item'> <span>栏目类别</span> </a> </li><li> <a navid='channel_news_comment' href='article/category_list.html' target='mainframe' class='item'> <span>评论管理</span> </a> </li></ul></li><li> <a navid='channel_goods' class='item'> <span>购物商城</span> </a><ul><li> <a navid='channel_goods_list' href='article/article_edit.html' target='mainframe' class='item'> <span>内容管理</span> </a> </li><li> <a navid='channel_goods_category' href='#' target='mainframe' class='item'> <span>栏目类别</span> </a> </li><li> <a navid='channel_goods_comment' href='#' target='mainframe' class='item'> <span>评论管理</span> </a> </li></ul></li><li> <a navid='channel_down' class='item'> <span>资源下载</span> </a><ul><li> <a navid='channel_down_list' href='#' target='mainframe' class='item'> <span>内容管理</span> </a> </li><li> <a navid='channel_down_category' href='#' target='mainframe' class='item'> <span>栏目类别</span> </a> </li><li> <a navid='channel_down_comment' href='#' target='mainframe' class='item'> <span>评论管理</span> </a> </li></ul></li><li> <a navid='channel_photo' class='item'> <span>图片分享</span> </a><ul><li> <a navid='channel_photo_list' href='#' target='mainframe' class='item'> <span>内容管理</span> </a> </li><li> <a navid='channel_photo_category' href='#' target='mainframe' class='item'> <span>栏目类别</span> </a> </li><li> <a navid='channel_photo_comment' href='#' target='mainframe' class='item'> <span>评论管理</span> </a> </li></ul></li><li> <a navid='channel_content' class='item'> <span>公司介绍</span> </a><ul><li> <a navid='channel_content_list' href='#' target='mainframe' class='item'> <span>内容管理</span> </a> </li><li> <a navid='channel_content_category' href='#' target='mainframe' class='item'> <span>栏目类别</span> </a> </li><li> <a navid='channel_content_comment' href='#' target='mainframe' class='item'> <span>评论管理</span> </a> </li></ul></li></ul><ul><li> <a navid='plugin_link' href='#' target='mainframe' class='item'> <span>链接管理</span> </a> </li><li> <a navid='plugin_feedback' href='#' target='mainframe' class='item'> <span>留言管理</span> </a> </li></ul></div><div class='list-group' name='会员'><ul><li> <a navid='user_manage' class='item'> <span>会员管理</span> </a><ul><li> <a navid='user_audit' href='#' target='mainframe' class='item selected'> <span>审核会员</span> </a> </li><li> <a navid='user_list' href='#' target='mainframe' class='item'> <span>所有会员</span> </a> </li><li> <a navid='user_group' href='#' target='mainframe' class='item'> <span>会员组别</span> </a> </li></ul></li><li> <a navid='user_log' class='item'> <span>会员日志</span> </a><ul><li> <a navid='user_sms' href='#' target='mainframe' class='item'> <span>发送短信</span> </a> </li><li> <a navid='user_message' href='#' target='mainframe' class='item'> <span>站内消息</span> </a> </li><li> <a navid='user_point_log' href='#' target='mainframe' class='item'> <span>积分记录</span> </a> </li><li> <a navid='user_amount_log' href='#' target='mainframe' class='item'> <span>消费记录</span> </a> </li></ul></li><li> <a navid='user_settings' class='item'> <span>会员设置</span> </a><ul><li> <a navid='user_config' href='#' target='mainframe' class='item'> <span>参数设置</span> </a> </li><li> <a navid='user_sms_template' href='#' target='mainframe' class='item'> <span>短信模板</span> </a> </li><li> <a navid='user_mail_template' href='#' target='mainframe' class='item'> <span>邮件模板</span> </a> </li><li> <a navid='user_oauth' href='#' target='mainframe' class='item'> <span>OAuth设置</span> </a> </li></ul></li></ul></div><div class='list-group' name='订单'><ul><li> <a navid='order_manage' class='item'> <span>订单管理</span> </a><ul><li> <a navid='order_confirm' href='#' target='mainframe' class='item selected'> <span>待确认订单</span> </a> </li><li> <a navid='order_list' href='#' target='mainframe' class='item'> <span>全部订单</span> </a> </li></ul></li><li> <a navid='order_settings' class='item'> <span>订单设置</span> </a><ul><li> <a navid='order_config' href='#' target='mainframe' class='item'> <span>订单参数设置</span> </a> </li><li> <a navid='order_payment' href='#' target='mainframe' class='item'> <span>支付方式设置</span> </a> </li><li> <a navid='order_express' href='#' target='mainframe' class='item'> <span>配送方式设置</span> </a> </li></ul></li></ul></div><div class='list-group' name='界面'><ul><li> <a navid='app_manage' class='item'> <span>应用管理</span> </a><ul><li> <a navid='app_templet_list' href='#' target='mainframe' class='item selected'> <span>网站模板管理</span> </a> </li><li> <a navid='app_plugin_list' href='#' target='mainframe' class='item'> <span>插件安装配置</span> </a> </li><li> <a navid='app_builder_html' href='#' target='mainframe' class='item'> <span>生成静态页面</span> </a> </li><li> <a navid='app_navigation_list' href='#' target='mainframe' class='item'> <span>后台导航管理</span> </a> </li></ul></li></ul></div><div class='list-group' name='控制面板'><ul><li> <a navid='site_manage' class='item'> <span>系统管理</span> </a><ul><li> <a navid='site_config' href='#' target='mainframe' class='item selected'> <span>系统设置</span> </a> </li><li> <a navid='site_url_rewrite' href='#' target='mainframe' class='item'> <span>URL配置</span> </a> </li><li> <a navid='site_channel_list' href='#' target='mainframe' class='item'> <span>频道管理</span> </a> </li><li> <a navid='site_channel_category' href='#' target='mainframe' class='item'> <span>频道分类</span> </a> </li><li> <a navid='site_channel_field' href='#' target='mainframe' class='item'> <span>扩展字段</span> </a> </li></ul></li><li> <a navid='sys_manager' class='item'> <span>系统用户</span> </a><ul><li> <a navid='manager_list' href='#' target='mainframe' class='item'> <span>管理员管理</span> </a> </li><li> <a navid='manager_role' href='#' target='mainframe' class='item'> <span>角色管理</span> </a> </li><li> <a navid='manager_log' href='#' target='mainframe' class='item'> <span>管理日志</span> </a> </li></ul></li></ul></div>";
+            $("#sidebar-nav .list-box").html(c);
+            $("#pop-menu .list-box").html(c);
+            initMenuTree(b);
+            initPopMenuTree();
+            $("#sidebar-nav").niceScroll({
+                touchbehavior: false,
+                cursorcolor: "#7C7C7C",
+                cursoropacitymax: 0.6,
+                cursorwidth: 5
+            });
+            $("#pop-menu .list-box").niceScroll({
+                touchbehavior: false,
+                cursorcolor: "#7C7C7C",
+                cursoropacitymax: 0.6,
+                cursorwidth: 5
+            });
+            $("#pop-menu .list-box").getNiceScroll().hide();
+            navresize()
+}
+function initMenuTree(a) {
+    $("#nav").html("");
+    $("#sidebar-nav .list-box .list-group").each(function(c) {
+        var b = $('<li><i class="icon-' + c + '"></i><span>' + $(this).attr("name") + "</span></li>").appendTo($("#nav"));
+        if (c == 0) {
+            $(this).show();
+            b.addClass("selected")
+        }
+        b.click(function() {
+            $("#nav li").removeClass("selected");
+            $(this).addClass("selected");
+            $("#sidebar-nav .list-box .list-group").hide();
+            $("#sidebar-nav .list-box .list-group").eq($("#nav li").index($(this))).show()
+        });
+        $(this).children("h2").click(function() {
+            if ($(this).next("ul").css("display") != "none") {
+                return false
+            }
+            $(this).siblings("ul").slideUp(300);
+            $(this).next("ul").slideDown(300);
+            if ($(this).next("ul").children("li").first().children("ul").length > 0) {}
+        });
+        $(this).find("ul").hide();
+        $(this).find("ul").each(function(d) {
+            $(this).children("li").each(function() {
+                liObj = $(this);
+                var h = liObj.children("a").children("span");
+                $('<div class="arrow"></div>').insertBefore(h);
+                var f = liObj.parent().parent().children("a").children(".expandable").length;
+                if (liObj.children("ul").length > 0) {
+                    liObj.children("a").removeAttr("href");
+                    liObj.children("a").addClass("pack");
+                    var e;
+                    for (var g = 0; g <= f; g++) {
+                        e = $('<div class="expandable"></div>').insertBefore(h)
+                    }
+                    e.addClass("close");
+                    $('<div class="folder close"></div>').insertBefore(h);
+                    liObj.children("ul").hide();
+                    liObj.children("a").click(function() {
+                        $(this).parent().siblings().each(function() {
+                            if ($(this).children("ul").length > 0) {
+                                $(this).children("a").children(".expandable").last().removeClass("open");
+                                $(this).children("a").children(".expandable").last().addClass("close");
+                                $(this).children("ul").slideUp(300)
+                            }
+                        });
+                        $(this).children(".expandable").last().removeClass("close");
+                        $(this).children(".expandable").last().addClass("open");
+                        $(this).parent().children("ul").slideDown(300)
+                    })
+                } else {
+                    for (var g = 0; g < f; g++) {
+                        $('<div class="expandable"></div>').insertBefore(h)
+                    }
+                    $('<div class="folder open"></div>').insertBefore(h);
+                    liObj.children("a").click(function() {
+                        $("#sidebar-nav .list-box .list-group ul li a").removeClass("selected");
+                        $(this).addClass("selected");
+                        addCookie("dt_manage_navigation_cookie", $(this).attr("navid"), 240)
+                    })
+                }
+            });
+            if (d == 0) {
+                $(this).show();
+                if ($(this).children("li").first().children("ul").length > 0) {
+                    $(this).children("li").first().children("a").children(".expandable").last().removeClass("close");
+                    $(this).children("li").first().children("a").children(".expandable").last().addClass("open");
+                    $(this).children("li").first().children("ul").show()
+                }
+            }
+        })
+    });
+    linkMenuTree(a)
+}
+function linkMenuTree(e, d) {
+    var b;
+    var c = arguments.length;
+    if (c == 2) {
+        b = $("#sidebar-nav").find('a[navid="' + d + '"]')
+    } else {
+        b = $("#sidebar-nav").find('a[navid="' + getCookie("dt_manage_navigation_cookie") + '"]')
+    }
+    if (b.length > 0) {
+        var a = $("#sidebar-nav .list-box .list-group").index(b.parents(".list-group"));
+        $("#nav li").removeClass("selected");
+        $("#nav li").eq(a).addClass("selected");
+        b.parents(".list-group").siblings().hide();
+        b.parents(".list-group").show();
+        b.parents("li").each(function() {
+            $(this).siblings().each(function() {
+                if ($(this).children("ul").length > 0) {
+                    $(this).children("a").children(".expandable").last().removeClass("open");
+				
+                    $(this).children("a").children(".expandable").last().addClass("close");
+                    $(this).children("ul").hide()
+                }
+            });
+            if ($(this).children("ul").length > 0) {
+                $(this).children("a").children(".expandable").last().removeClass("close");
+				
+                $(this).children("a").children(".expandable").last().addClass("open")
+            }
+            $(this).children("ul").show()
+        });
+        b.parents("ul").eq( - 1).show();
+        b.parents("ul").eq( - 1).siblings("ul").hide();
+        $("#sidebar-nav .list-box .list-group ul li a").removeClass("selected");
+        b.addClass("selected");
+        if (c == 2) {
+            addCookie("dt_manage_navigation_cookie", d, 240)
+        }
+        if (e == true) {
+            frames["mainframe"].location.href = b.attr("href")
+        }
+    } else {
+        if (c == 2) {
+            $("#sidebar-nav .list-box .list-group ul li a").removeClass("selected");
+            addCookie("dt_manage_navigation_cookie", "", 240)
+        }
+    }
+}
+function initPopMenuTree() {
+    var a = $("#pop-menu .list-box .list-group").length * $("#pop-menu .list-box .list-group").outerWidth();
+    var b = $(window).height() * 0.6;
+    if (a > ($(window).width() - 60)) {
+        a = $(window).width() - 60
+    }
+    var c = 0;
+    $("#pop-menu .list-box .list-group").each(function() {
+        if ($(this).height() > c) {
+            c = $(this).height()
+        }
+    });
+    if (b > c) {
+        b = c
+    }
+    $("#pop-menu .list-box .list-group").height(c);
+    $("#pop-menu .pop-box").width(a);
+    $("#pop-menu .pop-box").height(b);
+    $("#pop-menu .pop-box .list-box li").each(function() {
+        var d = $(this).children("a");
+        d.removeAttr("href");
+        if ($(this).children("ul").length > 0) {
+            d.addClass("nolink")
+        } else {
+            d.addClass("link");
+            d.click(function() {
+                linkMenuTree(true, d.attr("navid"))
+            })
+        }
+    })
+}
+function triggerMenu(a) {
+    if (a) {
+        $("#pop-menu .list-box").getNiceScroll().show();
+        $("#pop-menu").css("visibility", "visible")
+    } else {
+        $("#pop-menu .list-box").getNiceScroll().hide();
+        $("#pop-menu").css("visibility", "hidden")
+    }
+}
+function navresize() {
+    var a = $(document).width();
+    if (a < 1004) {
+        $(".nav li span").hide()
+    } else {
+        $(".nav li span").show()
+    }
+};
+</script>
+</head>
+<body class="indexbody" style="">
+  <div class="header">
+    <div class="header-box">
+      <h1 class="logo"></h1>
+      <ul id="nav" class="nav">
+        <li class="selected"><i class="icon-0"></i><span style="">内容</span></li>
+        <li class=""><i class="icon-1"></i><span style="">会员</span></li>
+        <li class=""><i class="icon-2"></i><span style="">订单</span></li>
+        <li class=""><i class="icon-3"></i><span style="">界面</span></li>
+        <li class=""><i class="icon-4"></i><span style="">控制面板</span></li>
+      </ul>
+      <div class="nav-right">
+        <div class="icon-info"> <span> 您好，demo</span> </div>
+        <div class="icon-option"> <i></i>
+          <div class="drop-box">
+            <div class="arrow"></div>
+            <ul class="drop-item">
+              <li><a target="_blank" href="../">预览网站</a></li>
+              <li><a href="center.aspx" target="mainframe">管理中心</a></li>
+              <li><a onclick="linkMenuTree(false, '');" href="manager/manager_pwd.aspx" target="mainframe">修改密码</a></li>
+              <li><a id="lbtnExit" href="javascript:__doPostBack('lbtnExit','')">注销登录</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main-sidebar">
+    <div id="sidebar-nav" class="sidebar-nav" style="overflow: hidden; outline: none; " tabindex="5000">
+      <div class="list-box">
+        <div class="list-group" name="内容" style="display: block; ">
+          <ul style="display: block; ">
+            <li> <a navid="channel_news" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable close"></div>
+              <div class="folder close"></div>
+              <span>新闻资讯</span> </a>
+              <ul style="display: none; ">
+                <li> <a navid="channel_news_list" href="article/article_list.html" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>内容管理</span> </a> </li>
+                <li> <a navid="channel_news_category" href="article/article_list_1.html" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>栏目类别</span> </a> </li>
+                <li> <a navid="channel_news_comment" href="article/category_list.html" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>评论管理</span> </a> </li>
+              </ul>
+            </li>
+            <li> <a navid="channel_goods" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable close"></div>
+              <div class="folder close"></div>
+              <span>购物商城</span> </a>
+              <ul style="display: none; ">
+                <li> <a navid="channel_goods_list" href="article/article_list.aspx?channel_id=2" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>内容管理</span> </a> </li>
+                <li> <a navid="channel_goods_category" href="article/category_list.aspx?channel_id=2" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>栏目类别</span> </a> </li>
+                <li> <a navid="channel_goods_comment" href="article/comment_list.aspx?channel_id=2" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>评论管理</span> </a> </li>
+              </ul>
+            </li>
+            <li> <a navid="channel_down" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable close"></div>
+              <div class="folder close"></div>
+              <span>资源下载</span> </a>
+              <ul style="display: none; ">
+                <li> <a navid="channel_down_list" href="article/article_list.aspx?channel_id=4" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>内容管理</span> </a> </li>
+                <li> <a navid="channel_down_category" href="article/category_list.aspx?channel_id=4" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>栏目类别</span> </a> </li>
+                <li> <a navid="channel_down_comment" href="article/comment_list.aspx?channel_id=4" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>评论管理</span> </a> </li>
+              </ul>
+            </li>
+            <li> <a navid="channel_photo" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable close"></div>
+              <div class="folder close"></div>
+              <span>图片分享</span> </a>
+              <ul style="display: none; ">
+                <li> <a navid="channel_photo_list" href="article/article_list.aspx?channel_id=3" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>内容管理</span> </a> </li>
+                <li> <a navid="channel_photo_category" href="article/category_list.aspx?channel_id=3" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>栏目类别</span> </a> </li>
+                <li> <a navid="channel_photo_comment" href="article/comment_list.aspx?channel_id=3" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>评论管理</span> </a> </li>
+              </ul>
+            </li>
+            <li> <a navid="channel_content" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable open"></div>
+              <div class="folder close"></div>
+              <span>公司介绍</span> </a>
+              <ul style="display: block; ">
+                <li> <a navid="channel_content_list" href="article/article_list.aspx?channel_id=5" target="mainframe" class="item selected">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>内容管理</span> </a> </li>
+                <li> <a navid="channel_content_category" href="article/category_list.aspx?channel_id=5" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>栏目类别</span> </a> </li>
+                <li> <a navid="channel_content_comment" href="article/comment_list.aspx?channel_id=5" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>评论管理</span> </a> </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="list-group" name="会员" style="display: none; ">
+          <ul style="display: block; ">
+            <li> <a navid="user_manage" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable close"></div>
+              <div class="folder close"></div>
+              <span>会员管理</span> </a>
+              <ul style="display: none; ">
+                <li> <a navid="user_audit" href="users/user_audit.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>审核会员</span> </a> </li>
+                <li> <a navid="user_list" href="users/user_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>所有会员</span> </a> </li>
+                <li> <a navid="user_group" href="users/group_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>会员组别</span> </a> </li>
+              </ul>
+            </li>
+            <li> <a navid="user_log" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable close"></div>
+              <div class="folder close"></div>
+              <span>会员日志</span> </a>
+              <ul style="display: none; ">
+                <li> <a navid="user_sms" href="users/user_sms.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>发送短信</span> </a> </li>
+                <li> <a navid="user_message" href="users/message_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>站内消息</span> </a> </li>
+                <li> <a navid="user_point_log" href="users/point_log.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>积分记录</span> </a> </li>
+                <li> <a navid="user_amount_log" href="users/amount_log.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>消费记录</span> </a> </li>
+              </ul>
+            </li>
+            <li> <a navid="user_settings" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable open"></div>
+              <div class="folder close"></div>
+              <span>会员设置</span> </a>
+              <ul style="display: block; ">
+                <li> <a navid="user_config" href="users/user_config.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>参数设置</span> </a> </li>
+                <li> <a navid="user_sms_template" href="users/sms_template_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>短信模板</span> </a> </li>
+                <li> <a navid="user_mail_template" href="users/mail_template_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>邮件模板</span> </a> </li>
+                <li> <a navid="user_oauth" href="users/oauth_app_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>OAuth设置</span> </a> </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="list-group" name="订单" style="display: none; ">
+          <ul style="display: block; ">
+            <li> <a navid="order_manage" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable open"></div>
+              <div class="folder close"></div>
+              <span>订单管理</span> </a>
+              <ul style="display: block; ">
+                <li> <a navid="order_confirm" href="order/order_confirm.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>待确认订单</span> </a> </li>
+                <li> <a navid="order_list" href="order/order_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>全部订单</span> </a> </li>
+              </ul>
+            </li>
+            <li> <a navid="order_settings" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable close"></div>
+              <div class="folder close"></div>
+              <span>订单设置</span> </a>
+              <ul style="display: none; ">
+                <li> <a navid="order_config" href="order/order_config.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>订单参数设置</span> </a> </li>
+                <li> <a navid="order_payment" href="order/payment_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>支付方式设置</span> </a> </li>
+                <li> <a navid="order_express" href="order/express_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>配送方式设置</span> </a> </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="list-group" name="界面" style="display: none; ">
+          <ul style="display: block; ">
+            <li> <a navid="app_manage" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable open"></div>
+              <div class="folder close"></div>
+              <span>应用管理</span> </a>
+              <ul style="display: block; ">
+                <li> <a navid="app_templet_list" href="settings/templet_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>网站模板管理</span> </a> </li>
+                <li> <a navid="app_plugin_list" href="settings/plugin_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>插件安装配置</span> </a> </li>
+                <li> <a navid="app_builder_html" href="settings/builder_html.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>生成静态页面</span> </a> </li>
+                <li> <a navid="app_navigation_list" href="settings/nav_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>后台导航管理</span> </a> </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="list-group" name="控制面板" style="display: none; ">
+          <ul style="display: block; ">
+            <li> <a navid="site_manage" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable open"></div>
+              <div class="folder close"></div>
+              <span>系统管理</span> </a>
+              <ul style="display: block; ">
+                <li> <a navid="site_config" href="settings/sys_config.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>系统设置</span> </a> </li>
+                <li> <a navid="site_url_rewrite" href="settings/url_rewrite_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>URL配置</span> </a> </li>
+                <li> <a navid="site_channel_list" href="channel/channel_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>频道管理</span> </a> </li>
+                <li> <a navid="site_channel_category" href="channel/category_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>频道分类</span> </a> </li>
+                <li> <a navid="site_channel_field" href="channel/attribute_field_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>扩展字段</span> </a> </li>
+              </ul>
+            </li>
+            <li> <a navid="sys_manager" class="item pack">
+              <div class="arrow"></div>
+              <div class="expandable close"></div>
+              <div class="folder close"></div>
+              <span>系统用户</span> </a>
+              <ul style="display: none; ">
+                <li> <a navid="manager_list" href="manager/manager_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>管理员管理</span> </a> </li>
+                <li> <a navid="manager_role" href="manager/role_list.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>角色管理</span> </a> </li>
+                <li> <a navid="manager_log" href="manager/manager_log.aspx" target="mainframe" class="item">
+                  <div class="arrow"></div>
+                  <div class="expandable"></div>
+                  <div class="folder open"></div>
+                  <span>管理日志</span> </a> </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  <div class="main-container">
+    <iframe id="mainframe" name="mainframe" frameborder="0" src="center.html"></iframe>
+  </div>
+  
+  </body>
+</html>

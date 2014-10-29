@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>管理员登录</title>
+<link href="skin/default/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../scripts/jquery/jquery-1.10.2.min.js"></script>
+</head>
+
+<body class="loginbody">
+<form method="post" action="login.aspx" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUJODk3NzU1NTEyZGSuIECjk/tLetNFxSqZg3GZc8yXnoYITaRFEe+gyaZ3Gw==" />
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWBAKOjMP6DwKl1bKzCQK1qbSRCwLCi9reA4V4yPGjgD1BT8dJqCZIJSLJlyvQ6JZuPHFGNhHGhUSv" />
+</div>
+<div class="login-screen">
+    <div class="login-form">
+    	<div class="login-icon">LOGO</div>
+        <div class="clear"></div>
+        <div class="control-group">
+            <input name="txtUserName" type="text" id="txtUserName" class="login-field" placeholder="用户名" title="用户名" />
+            <label class="login-field-icon user" for="txtUserName"></label>
+        </div>
+        <div class="control-group">
+            <input name="txtPassword" type="password" id="txtPassword" class="login-field" placeholder="密码" title="密码" />
+            <label class="login-field-icon pwd" for="txtPassword"></label>
+        </div>
+        <div><input type="submit" name="btnSubmit" value="登 录" id="btnSubmit" class="btn-login" /></div>
+        <span class="login-tips"><i></i><b id="msgtip">请输入用户名和密码</b></span>
+    </div>
+</div>
+</form>
+</body>
+</html>

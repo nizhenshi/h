@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+<script>
+// skin demo
+(function() {
+	var _skin, _lhgcore;
+	var _search = window.location.search;
+	if (_search) {
+		_skin = _search.split('demoSkin=')[1];
+	};
+	
+	document.write('<scr'+'ipt src="lhgdialog.min.js?skin=' + (_skin || 'default') +'"></sc'+'ript>');
+	window._isDemoSkin = !!_skin;
+})();
+</script>
+</head>
+
+<body>
+<Script>
+$.dialog({title:'我是新标题'});
+
+</script>
+</body>
+</html>
